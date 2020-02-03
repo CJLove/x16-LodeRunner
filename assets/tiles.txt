@@ -1,0 +1,29 @@
+# 8x8 tiles mode 2 (2bits per pixel)
+# load at $0400 to preserve first 64 characters
+#
+# tile 64 - brick w/color index 1
+5545 5545 5545 0000 5155 5155 5155 0000
+# tile 65 - block w/color index 1
+5555 5555 5555 5555 5555 5555 5555 0000
+# tile 66 - trap w/color index 1 (displays as brick)
+5545 5545 5545 0000 5155 5155 5155 0000
+# tile 67 - ladder w/color index 2
+2828 2aa8 2828 2828 2828 2aa8 2828 2828
+# tile 68 - hidden ladder (blank)
+0000 0000 0000 0000 0000 0000 0000 0000
+# tile 69 - rope w/color index 2
+0000 aaaa 0000 0000 0000 0000 0000 0000
+# tile 70 - gold w/color indices 2 and 1
+0000 2aa8 2aa8 2968 2968 2aa8 2aa8 0000
+# tile 71 - hole
+0000 0000 0000 0000 0000 0000 0000 0000
+# tile 72 - hole regen #1 w/color index 1
+0000 0000 0000 0000 4000 5001 5005 0000
+# tile 73 - hole regen #2 w/color index 1
+0000 0000 4000 0000 5005 5015 5055 0000
+# tile 74 - hole regen #3 w/color index 1
+0000 4001 5005 0000 5155 5155 5155 0000
+# tile 75 - blast debris w/color index 1
+0000 0000 0040 0041 1004 0440 0000 0000
+# tile 76 - ground/var w/color index 1
+5555 5555 5555 5555 5555 0000 0000 0000
