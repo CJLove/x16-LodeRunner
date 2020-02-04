@@ -3,10 +3,46 @@
 #include "loderunner.h"
 
 
-static const unsigned char status[] = {
-    19, 3, 15, 18, 5, 48, 48, 48, 48, 48, 48, 48, 32, 13, 5, 14, 48, 48, 48, 
-    32, 12, 5, 22, 5, 12, 48, 48, 48
+static const unsigned char labelScore[] = {
+    19, 3, 15, 18, 5
 };
+static const unsigned char labelMen[] = {
+    13, 5, 14
+};
+static const unsigned char labelLevel[] = {
+    12, 5, 22, 5, 12
+};
+
+void displayStatus(uint32_t score, uint8_t men, uint8_t level) {
+    uint8_t col = 0;
+    char buffer[10];
+    // Display status row (18th row)
+
+    // SCORE
+    for (col = 0; col < 5; col++) {
+        setTile(col,LEVEL_ROW_COUNT+1,labelScore[col],0);
+    }
+    snprintf(buffer,10,"%07d",score);
+    for (col = 0; col < 7; col++) {
+        setTile(col+5,LEVEL_ROW_COUNT+1,buffer[col]+48,3);
+    }
+    // MEN
+    for (col = 0; col < 3; col++) {
+        setTile(col+12,LEVEL_ROW_COUNT+1,labelMen[col],0);
+    }
+    snprintf(buffer,10,"%03d",(int)men);
+    for (col = 0; col < 3; col++) {
+        setTile(col+15,LEVEL_ROW_COUNT+1,buffer[col]+48,3);
+    }
+    // LEVEL
+    for (col = 0; col < 5; col++) {
+        setTile(col+19,LEVEL_ROW_COUNT+1,labelLevel[col],0);
+    }
+    snprintf(buffer,10,"%03d",(int)level);
+    for (col = 0; col < 3; col++) {
+        setTile(col+24,LEVEL_ROW_COUNT+1,buffer[col]+48,3);
+    }
+}
 
 void dumpLevel(unsigned char bank, unsigned char level, unsigned char row)
 {
@@ -79,11 +115,8 @@ int displayLevel(unsigned char bank, unsigned char level)
         for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
             setTile(col,LEVEL_ROW_COUNT,TILE_GROUND,0);
         }
+        displayStatus(0,0,level);
 
-        // Display status row (18th row)
-        for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
-            setTile(col,LEVEL_ROW_COUNT+1,status[col],0);
-        }
         return 1;
     }
     // Invalid level for this bank

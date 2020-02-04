@@ -2,12 +2,15 @@
 #include <cbm.h>
 #include <cx16.h>
 #include "vload.h"
+#include "load.h"
 
 
 int loadFiles()
 {
     int result = 1;
     unsigned char *dest = NULL;
+
+    // TODO: Look at EMULATOR->detect[0] and [1] to detect if running in emulator
 
     // Load palette
     result = vload_host("palette.bin",0xf1000);
@@ -17,16 +20,14 @@ int loadFiles()
         printf("  Failed to load palette\n");
     
     // Load tiles
-    result = vload_host("tiles.bin",0x10400);
+    result = vload_host("tiles.bin",0x10000);
     if (result) 
         printf("  Loaded tiles\n");
     else
         printf("  Failed to load tiles\n");
     
     // Load classic levels to bank 1
-    VIA1.pra = 1;
-    dest = (unsigned char*)0xa000;
-    result = cbm_load("classic.bin",8,dest);
+    result = load_bank_host("classic.bin",1);
     if (result)
         printf("  Loaded classic levels\n");
     else
