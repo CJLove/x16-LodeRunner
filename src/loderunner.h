@@ -15,6 +15,8 @@
 #define TILE_BLAST  75
 #define TILE_GROUND 76
 
+#define TILE_GUARD  36
+
 // Bank definitions
 #define BANK_CLASSIC    1
 #define BANK_FANBOOK    2

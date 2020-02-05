@@ -13,6 +13,15 @@ static const unsigned char labelLevel[] = {
     12, 5, 22, 5, 12
 };
 
+void displayScore(uint32_t score) {
+    uint8_t col = 0;
+    char buffer[10];
+    snprintf(buffer,10,"%07d",score);
+    for (col = 0; col < 7; col++) {
+        setTile(col+5,LEVEL_ROW_COUNT+1,buffer[col],0);
+    }
+}
+
 void displayStatus(uint32_t score, uint8_t men, uint8_t level) {
     uint8_t col = 0;
     char buffer[10];
@@ -22,25 +31,23 @@ void displayStatus(uint32_t score, uint8_t men, uint8_t level) {
     for (col = 0; col < 5; col++) {
         setTile(col,LEVEL_ROW_COUNT+1,labelScore[col],0);
     }
-    snprintf(buffer,10,"%07d",score);
-    for (col = 0; col < 7; col++) {
-        setTile(col+5,LEVEL_ROW_COUNT+1,buffer[col]+48,3);
-    }
+    displayScore(score);
+
     // MEN
     for (col = 0; col < 3; col++) {
-        setTile(col+12,LEVEL_ROW_COUNT+1,labelMen[col],0);
+        setTile(col+13,LEVEL_ROW_COUNT+1,labelMen[col],0);
     }
     snprintf(buffer,10,"%03d",(int)men);
     for (col = 0; col < 3; col++) {
-        setTile(col+15,LEVEL_ROW_COUNT+1,buffer[col]+48,3);
+        setTile(col+16,LEVEL_ROW_COUNT+1,buffer[col],0);
     }
     // LEVEL
     for (col = 0; col < 5; col++) {
-        setTile(col+19,LEVEL_ROW_COUNT+1,labelLevel[col],0);
+        setTile(col+20,LEVEL_ROW_COUNT+1,labelLevel[col],0);
     }
     snprintf(buffer,10,"%03d",(int)level);
     for (col = 0; col < 3; col++) {
-        setTile(col+24,LEVEL_ROW_COUNT+1,buffer[col]+48,3);
+        setTile(col+25,LEVEL_ROW_COUNT+1,buffer[col],0);
     }
 }
 
@@ -107,7 +114,11 @@ int displayLevel(unsigned char bank, unsigned char level)
                 unsigned char tile = *(levelPtr + row*LEVEL_ROW_OFFSET + col);
 
                 // TODO: Treat tile values marking guard or runner as blanks in the actual tile map
-                setTile(col,row,tile,0);
+                if (tile == TILE_GUARD) {
+                    setTile(col,row,tile,0);
+                } else {
+                    setTile(col,row,tile,0);
+                }
             }
         }
 
