@@ -25,8 +25,22 @@ TILES.BIN: ../assets/tiles.txt
 CLASSIC.BIN: ../assets/classic.json
 	../scripts/levels.py ../assets/classic.json CLASSIC.BIN
 
+CHAMP.BIN: ../assets/championship.json
+	../scripts/levels.py ../assets/championship.json CHAMP.BIN
+
+PRO.BIN: ../assets/professional.json
+	../scripts/levels.py ../assets/professional.json PRO.BIN
+
 FANBOOK.BIN: ../assets/fanbook.json
 	../scripts/levels.py ../assets/fanbook.json FANBOOK.BIN
 
+REVENGE.BIN: ../assets/revenge.json
+	../scripts/levels.py ../assets/revenge.json REVENGE.BIN
+
+SPRITS.BIN: ../assets.sprites.txt ../scripts/graphic.py
+	../scripts/graphic.py --input ../assets/sprites.txt --output SPRITES.BIN --x 8 --y 8 --bpp 4 --addr e000
+
 clean:
 	rm -f *.prg *.o
+
+bins: CLASSIC.BIN CHAMP.BIN PRO.BIN FANBOOK.BIN REVENGE.BIN

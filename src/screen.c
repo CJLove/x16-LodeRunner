@@ -23,18 +23,18 @@ int screenConfig()
     return 1;
 }
 
-void setTile(unsigned char x, unsigned char y, unsigned char tile, unsigned char paletteOffset)
+void setTile(uint8_t x, uint8_t y, uint8_t tile, uint8_t paletteOffset)
 {
     vpoke(tile, y*OFFSET + x*2);
     vpoke(paletteOffset, y*OFFSET + x*2 +1);
 }
 
-unsigned char getTile(unsigned char x, unsigned char y)
+uint8_t getTile(uint8_t x, uint8_t y)
 {
     return vpeek(y*OFFSET + x*2);
 }
 
-unsigned char getTileXY(uint16_t x, uint16_t y)
+uint8_t getTileXY(uint16_t x, uint16_t y)
 {
     // Convert pixel position to tile position
     // TBD

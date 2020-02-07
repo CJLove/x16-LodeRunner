@@ -36,7 +36,7 @@ with open(args.output,"wb") as out:
 
     with open(args.input,"r") as file:
         for line in file:
-            if line[0] != ':':
+            if line[0] != '#':
                 i = 0
                 while ord(line[i]) >= 32 and ord(line[i]) != 35:
                     if line[i] == ' ':
