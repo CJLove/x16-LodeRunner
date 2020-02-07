@@ -29,7 +29,7 @@ int loadFiles()
     // Load classic levels to bank 1
     result = load_bank_host("classic.bin",1);
     if (result)
-        printf("  Loaded classic levels\n");
+        printf("  Loaded classic levels: %d\n",result);
     else
         printf("  Failed to load classic levels\n");
 

@@ -45,37 +45,41 @@ void displayStatus(uint32_t score, uint8_t men, uint8_t level) {
     for (col = 0; col < 5; col++) {
         setTile(col+20,LEVEL_ROW_COUNT+1,labelLevel[col],0);
     }
-    snprintf(buffer,10,"%03d",(int)level);
+    snprintf(buffer,10,"%03d",(int)level+1);
     for (col = 0; col < 3; col++) {
         setTile(col+25,LEVEL_ROW_COUNT+1,buffer[col],0);
     }
 }
 
-void dumpLevel(unsigned char bank, unsigned char level, unsigned char row)
+void dumpLevel(unsigned char bank, unsigned char level)
 {
     uint16_t max = 0;
-    VIA1.pra = bank;
-
+    bank = VIA1.pra;
     max = *(uint16_t*)LEVEL_COUNT;
-    printf("Max levels = %d\n",max);
-
+//    printf("Max levels = %u\n",max);
+    printf("\nBank: %d Level: %d\n",bank,level);
     level--; // zero-based indexing for level data
     if (level < max) {
         unsigned char *levelPtr = (unsigned char*)(LEVEL_BASE + (LEVEL_OFFSET * level));
+        unsigned char *endPtr = (unsigned char*)0xc000;
+
         unsigned char col = 0;
+        unsigned char row = 0;
+        for (row = 0; row < LEVEL_ROW_COUNT; row++) {
+            for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
+                unsigned char tile = 0;
+                if (levelPtr + row*LEVEL_ROW_OFFSET + col == endPtr) {
+                    bank++;
+//                    printf("***Bank=%d\n",bank);
 
-        for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
-            unsigned char tile = *(unsigned char*)(levelPtr + row*LEVEL_ROW_OFFSET + col);
-
-            if ((col % 7) == 0) {
-                printf("\n");
+                    VIA1.pra = bank;
+                    levelPtr = (unsigned char*)0xa000;
+                }
+                tile = *(levelPtr + row*LEVEL_ROW_OFFSET + col);
+                printf("%c",tile);
             }
-
-            printf("Col%2d = %2d ",col,tile);
-
-
+            printf("\n");
         }
-        printf("\n");
     }
 }
 
@@ -88,8 +92,7 @@ void completeLevel()
         for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
             unsigned char tile = getTile(row,col);
             if (tile == TILE_HIDDEN) {
-                tile = TILE_LADDER;
-                setTile(row,col,tile,0);
+                setTile(row,col,TILE_LADDER,0);
             }
         }
     }
@@ -106,12 +109,19 @@ int displayLevel(unsigned char bank, unsigned char level)
     level--; // zero-based indexing for level data
     if (level < max) {
         unsigned char *levelPtr = (unsigned char*)(LEVEL_BASE + (LEVEL_OFFSET * level));
+        unsigned char *endPtr = (unsigned char*)0xc000;
         unsigned char row = 0;
         unsigned char col = 0;
+        unsigned char tile = 0;
 
         for (row = 0; row < LEVEL_ROW_COUNT; row++) {
             for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
-                unsigned char tile = *(levelPtr + row*LEVEL_ROW_OFFSET + col);
+                if (levelPtr + row*LEVEL_ROW_OFFSET + col == endPtr) {
+                    bank++;
+                    VIA1.pra = bank;
+                    levelPtr = (unsigned char*)0xa000;
+                }
+                tile = *(levelPtr + row*LEVEL_ROW_OFFSET + col);
 
                 // TODO: Treat tile values marking guard or runner as blanks in the actual tile map
                 if (tile == TILE_GUARD) {

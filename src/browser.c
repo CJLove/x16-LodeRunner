@@ -9,7 +9,7 @@
 int main()
 {
     int result = 0;
-    unsigned char level = 2;
+    unsigned char level = 1;
     printf("Loading resources...\n");
     
     result = loadFiles();
@@ -21,11 +21,18 @@ int main()
         return result;
     }
 
-    // dumpLevel(1,1,0);
-    // dumpLevel(1,1,1);
-    // dumpLevel(1,1,2);
-    // dumpLevel(1,1,3);
-
+    VIA1.pra = 1;
+    dumpLevel(1,level);
+    do {
+        if (kbhit()) {
+            char c = cgetc();
+            if (c == ' ') {
+                level++;
+                dumpLevel(1,level);
+            }
+        }
+    } while(1);
+#if 0
     screenConfig();
 
     displayLevel(1,level);
@@ -53,5 +60,6 @@ int main()
         sleep(1);
     } while (1);
     cgetc();
+#endif
     return result;
 }

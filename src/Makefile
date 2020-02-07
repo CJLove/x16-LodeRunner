@@ -17,10 +17,10 @@ levels: browser.c $(SRC)
 	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o levels.prg browser.c $(SRC) libX16.lib cx16.lib
 
 PALETTE.BIN: ../assets/palette.txt
-	../scripts/ascii2bin.py ../assets/palette.txt PALETTE.BIN 
+	../scripts/ascii2bin.py ../assets/palette.txt PALETTE.BIN 1000
 
 TILES.BIN: ../assets/tiles.txt
-	../scripts/ascii2bin.py ../assets/tiles.txt TILES.BIN
+	../scripts/ascii2bin.py ../assets/tiles.txt TILES.BIN 0000
 
 CLASSIC.BIN: ../assets/classic.json
 	../scripts/levels.py ../assets/classic.json CLASSIC.BIN

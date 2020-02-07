@@ -42,6 +42,6 @@ extern unsigned char getTileXY (uint16_t x, uint16_t y);
 
 // Level map utilities - levels.c
 extern int displayLevel(unsigned char bank, unsigned char level);
-extern void dumpLevel(unsigned char bank, unsigned char level, unsigned char row);
+extern void dumpLevel(unsigned char bank, unsigned char level);
 extern void completeLevel();
 

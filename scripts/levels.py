@@ -48,7 +48,7 @@ if "levels" in top:
         out.write(header)
 
         # 2 byte field specifying number of levels
-        header2 = bytearray([(num_levels >> 8), num_levels & 0xff ])
+        header2 = bytearray([num_levels & 0xff, (num_levels >> 8)  ])
         out.write(header2)
 
         for i in range(1,num_levels+1):
