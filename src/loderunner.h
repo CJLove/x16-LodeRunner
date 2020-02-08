@@ -39,6 +39,11 @@
 #define LEVEL_ROW_COUNT 16
 #define LEVEL_OFFSET 224
 
+// Sprite images
+#define RUNNER_1 0x11e000
+#define RUNNER_2 0x11e020
+#define RUNNER_3 0x11e040
+
 
 // Declarations of all functions
 
@@ -50,6 +55,7 @@ extern int screenConfig();
 extern void setTile(uint8_t x, uint8_t y, uint8_t tile, uint8_t paletteOffset);
 extern uint8_t getTile(uint8_t x, uint8_t y);
 extern uint8_t getTileXY (uint16_t x, uint16_t y);
+extern uint8_t getTileBelowXY (uint16_t x, uint16_t y);
 
 // Level map utilities - levels.c
 extern int displayLevel(uint8_t bank, uint8_t level);

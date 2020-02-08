@@ -29,6 +29,15 @@ int loadFiles()
         printf("  Failed to load tiles\n");
         return 0;
     }
+
+    // Load sprites
+    result = vload_host("sprites.bin",0x1e000);
+    if (result)
+        printf("  Loaded sprites\n");
+    else {
+        printf("  Failed to load sprites\n");
+        return 0;
+    }
     
     // Load classic levels to banks 1-5
     result = load_bank_host("classic.bin",1);

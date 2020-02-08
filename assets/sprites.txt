@@ -1,0 +1,31 @@
+# Sprites are 8x8, 4 bits per pixel (complete overkill)
+# 0-3 is the color for each pixel
+#
+# Runner - use color 2 (white)
+# running right 0 of 3
+00002000
+00022200
+00022200
+02222000
+22020220
+00022000
+22202200
+00002200
+# running right 2 of 3
+00002000
+00022200
+00022200
+00220220
+00020000
+02202000
+00202000
+# running right 3 of 3
+00002000
+00022200
+00022200
+00222020
+02020220
+00022000
+00220220
+02200000
+#

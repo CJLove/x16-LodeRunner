@@ -37,7 +37,15 @@ uint8_t getTile(uint8_t x, uint8_t y)
 uint8_t getTileXY(uint16_t x, uint16_t y)
 {
     // Convert pixel position to tile position
-    // TBD
-    x = y;
-    return 0;
+    x = x / 8;
+    y = y / 8;
+    return vpeek(y*OFFSET + x*2);
+}
+
+uint8_t getTileBelowXY(uint16_t x, uint16_t y)
+{
+    x = x / 8;
+    y = y / 8;
+    y++;
+    return vpeek(y*OFFSET + x*2);
 }
