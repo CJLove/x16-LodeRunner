@@ -23,7 +23,7 @@ PALETTE.BIN: ../assets/palette.txt
 	../scripts/ascii2bin.py ../assets/palette.txt PALETTE.BIN 1000
 
 TILES.BIN: ../assets/tiles.txt
-	../scripts/ascii2bin.py ../assets/tiles.txt TILES.BIN 0000
+	../scripts/graphic.py --input ../assets/tiles.txt --output TILES.BIN --x 8 --y 8 --bpp 2 --addr 0000
 
 CLASSIC.BIN: ../assets/classic.json
 	../scripts/levels.py ../assets/classic.json CLASSIC.BIN

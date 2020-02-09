@@ -10,8 +10,6 @@
 
 # TODO
 - Cleanup python scripts
-- Complete the alphabetic tiles versus just those needed for status line.  
-- Redo tiles.txt so TILES.BIN can be built using the same `graphic.py` script as sprites.txt
 - Code cleanup/refactoring
 
 
