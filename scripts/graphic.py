@@ -45,7 +45,6 @@ with open(args.output,"wb") as out:
 
     with open(args.input,"r") as file:
         for line in file:
-            print ("Looking at %s " % line)
             if not line:
                 continue
             if line[0] == '\n':
