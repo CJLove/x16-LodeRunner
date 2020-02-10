@@ -9,8 +9,8 @@ import sys
 
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
     description='Converts levels file (json) to .bin file')
-parser.add_argument('input', help='.json filename')
-parser.add_argument('output', help='.bin filename')
+parser.add_argument('--input', help='.json filename')
+parser.add_argument('--output', help='.bin filename')
 args = parser.parse_args()
 
 # Note: these tile assignments must match those used in the runtime code

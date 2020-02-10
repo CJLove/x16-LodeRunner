@@ -40,9 +40,28 @@
 #define LEVEL_OFFSET 224
 
 // Sprite images
-#define RUNNER_1 0x11e000
-#define RUNNER_2 0x11e020
-#define RUNNER_3 0x11e040
+#define RUNNER_1        0x11e000
+#define RUNNER_2        0x11e020
+#define RUNNER_3        0x11e040
+#define RUNNER_CLIMB_1  0x11e060
+#define RUNNER_CLIMB_2  0x11e080
+#define RUNNER_FALLING  0x11e0a0
+#define RUNNER_RAPELL_1 0x11e0c0
+#define RUNNER_RAPELL_2 0x11e0e0
+#define RUNNER_RAPELL_3 0x11e100
+#define GUARD_1         0x11e120
+#define GUARD_2         0x11e140
+#define GUARD_3         0x11e160
+#define GUARD_CLIMB_1   0x11e180
+#define GUARD_CLIMB_2   0x11e1a0
+#define GUARD_FALLING   0x11e1c0
+#define GUARD_RAPELL_1  0x11e1e0
+#define GUARD_RAPELL_2  0x11e200
+#define GUARD_RAPELL_3  0x11e220
+
+
+
+
 
 
 // Declarations of all functions

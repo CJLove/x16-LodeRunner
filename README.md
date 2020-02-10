@@ -12,3 +12,7 @@ This port is (so far :) ) being written in C using the [CC65](https://cc65.githu
 * `runner.prg` - tests the runner's animations and basic movements on level 1.  Use the `j` and `k` for left/right, `i` and `m` for up/down.  The tiles directly under and directly below the runner are shown to the right, along with the runner's sprite's X and Y locations.
 
 ![](runner.gif)
+
+* `tiles.prg` - displays tiles (alphabetic characters, numbers, game tiles)
+
+* `sprites.prg` - displays sprite images for the runner and guards (images are reversed as necessary for moving left)

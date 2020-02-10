@@ -17,9 +17,9 @@ def get_nibble(c):
 
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
     description='Converts .txt file to .bin file')
-parser.add_argument('input', help='.json filename')
-parser.add_argument('output', help='.bin filename')
-parser.add_argument('addr', help='hex load address')
+parser.add_argument('--input', help='.json filename')
+parser.add_argument('--output', help='.bin filename')
+parser.add_argument('--addr', help='hex load address')
 args = parser.parse_args()
 
 addr=0

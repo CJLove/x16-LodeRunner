@@ -5,11 +5,10 @@
 
 # Rough plans
 - Complete runner sprite images, get all movement and actions on a level fully working
-- Do guard sprite images, start adding runner AI based on other LodeRunner ports
+- Start adding runner AI based on other LodeRunner ports
 - Longer term: consider incorporating tilesets and concepts from LodeRunner Mad Monks Revenge
 
 # TODO
-- Cleanup python scripts
 - Code cleanup/refactoring
 
 

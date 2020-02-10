@@ -14,10 +14,20 @@ void displayPos(uint16_t x, uint16_t y)
     setTile(37,5,buffer[1],0);
     setTile(38,5,buffer[2],0);
 
+    sprintf(buffer,"%3d",x%8);
+    setTile(36,6,buffer[0],0);
+    setTile(37,6,buffer[1],0);
+    setTile(38,6,buffer[2],0);
+
     sprintf(buffer,"%3d",y);
     setTile(36,7,buffer[0],0);
     setTile(37,7,buffer[1],0);
     setTile(38,7,buffer[2],0);    
+
+    sprintf(buffer,"%3d",y%8);
+    setTile(36,8,buffer[0],0);
+    setTile(37,8,buffer[1],0);
+    setTile(38,8,buffer[2],0);
 }
 
 int main()
