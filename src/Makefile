@@ -5,25 +5,31 @@ LIBRARIES := ../libX16/lib
 INCLUDE := ../libX16/include
 
 SRC = \
-	loader.c screen.c levels.c
+	loader.c screen.c levels.c runner.c key.c
 
 OBJ = $(SRC:%.c=%.o)
 
 #.c.o:
 #	cl65 -t cx16 -I $(INCLUDE) -Oi $<
 
+lode_runner: mainloop.c $(SRC)
+	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o lode_runner.prg mainloop.c $(SRC) libX16.lib cx16.lib
 
-levels: test_levels.c $(SRC)
-	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o levels.prg test_levels.c $(SRC) libX16.lib cx16.lib
+test_keys: test_keys.c $(SRC)
+	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_keys.prg test_keys.c $(SRC) libX16.lib cx16.lib
 
-runner: test_runner.c $(SRC)
-	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o runner.prg test_runner.c $(SRC) libX16.lib cx16.lib
 
-tiles: test_tiles.c $(SRC)
-	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o tiles.prg test_tiles.c $(SRC) libX16.lib cx16.lib
+test_levels: test_levels.c $(SRC)
+	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_levels.prg test_levels.c $(SRC) libX16.lib cx16.lib
 
-sprites: test_sprites.c $(SRC)
-	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o sprites.prg test_sprites.c $(SRC) libX16.lib cx16.lib
+test_runner: test_runner.c $(SRC)
+	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_runner.prg test_runner.c $(SRC) libX16.lib cx16.lib
+
+test_tiles: test_tiles.c $(SRC)
+	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_tiles.prg test_tiles.c $(SRC) libX16.lib cx16.lib
+
+test_sprites: test_sprites.c $(SRC)
+	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_sprites.prg test_sprites.c $(SRC) libX16.lib cx16.lib
 
 PALETTE.BIN: ../assets/palette.txt
 	../scripts/ascii2bin.py --input ../assets/palette.txt --output PALETTE.BIN --addr 1000

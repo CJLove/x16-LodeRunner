@@ -46,22 +46,38 @@
 #define RUNNER_CLIMB_1  0x11e060
 #define RUNNER_CLIMB_2  0x11e080
 #define RUNNER_FALLING  0x11e0a0
-#define RUNNER_RAPELL_1 0x11e0c0
-#define RUNNER_RAPELL_2 0x11e0e0
-#define RUNNER_RAPELL_3 0x11e100
+#define RUNNER_RAPPEL_1 0x11e0c0
+#define RUNNER_RAPPEL_2 0x11e0e0
+#define RUNNER_RAPPEL_3 0x11e100
 #define GUARD_1         0x11e120
 #define GUARD_2         0x11e140
 #define GUARD_3         0x11e160
 #define GUARD_CLIMB_1   0x11e180
 #define GUARD_CLIMB_2   0x11e1a0
 #define GUARD_FALLING   0x11e1c0
-#define GUARD_RAPELL_1  0x11e1e0
-#define GUARD_RAPELL_2  0x11e200
-#define GUARD_RAPELL_3  0x11e220
+#define GUARD_RAPPEL_1  0x11e1e0
+#define GUARD_RAPPEL_2  0x11e200
+#define GUARD_RAPPEL_3  0x11e220
 
+// Actions
+#define ACT_UNKNOWN  -1
+#define ACT_STOP    0
+#define ACT_LEFT    1
+#define ACT_RIGHT   2
+#define ACT_UP      3
+#define ACT_DOWN    4
+#define ACT_FALL    5
+#define ACT_FALL_BAR    6
+#define ACT_DIG_LEFT    7
+#define ACT_DIG_RIGHT   8
+#define ACT_DIGGING     9
+#define ACT_IN_HOLE     10
+#define ACT_CLIMB_OUT   11
+#define ACT_REBORN      12
 
-
-
+#define SCORE_GET_GOLD      250
+#define SCORE_IN_HOLE       75
+#define SCORE_GUARD_DEAD    75
 
 
 // Declarations of all functions
@@ -71,13 +87,16 @@ extern int loadFiles();
 
 // Screen configuration and tile set/get - screen.c
 extern int screenConfig();
+extern void screenReset();
 extern void setTile(uint8_t x, uint8_t y, uint8_t tile, uint8_t paletteOffset);
 extern uint8_t getTile(uint8_t x, uint8_t y);
 extern uint8_t getTileXY (uint16_t x, uint16_t y);
 extern uint8_t getTileBelowXY (uint16_t x, uint16_t y);
 
 // Level map utilities - levels.c
-extern int displayLevel(uint8_t bank, uint8_t level);
-extern void dumpLevel(uint8_t bank, uint8_t level);
+extern int loadLevel(uint8_t bank, uint8_t level);
+extern int displayLevel(uint8_t level);
+extern void dumpLevel(uint8_t level);
 extern void completeLevel();
+extern void displayScore(uint32_t addScore);
 

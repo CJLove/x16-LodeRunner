@@ -22,9 +22,10 @@ int main()
         return result;
     }
 
-#if defined(TEXT_BROWSE)
+#if 1
     VIA1.pra = 1;
-    dumpLevel(WORLD_CLASSIC,level);
+    loadLevel(WORLD_CLASSIC,level);
+    dumpLevel(level);
     VIA1.pra = 1;
 
     do {
@@ -32,14 +33,16 @@ int main()
             char c = cgetc();
             if (c == ' ') {
                 level++;
-                dumpLevel(1,level);
+                loadLevel(WORLD_CLASSIC,level);
+                dumpLevel(level);
             }
         }
     } while(1);
-#endif
+#else
     screenConfig();
 
-    displayLevel(world,level);
+    loadLevel(world,level);
+    displayLevel(level-1);
 
     //completeLevel();
     do {
@@ -56,36 +59,43 @@ int main()
                     break;
                 case '+':
                     level++;
-                    displayLevel(world,level);
+                    loadLevel(world,level);
+                    displayLevel(level-1);
                     break;
                 case '-':
                     level--;
-                    displayLevel(world,level);
+                    loadLevel(world,level);
+                    displayLevel(level-1);
                     break;
                 case '1':
                     world = WORLD_CLASSIC;
                     level = 1;
-                    displayLevel(world,level);
+                    loadLevel(world,level);
+                    displayLevel(level-1);
                     break;
                 case '2':
                     world = WORLD_CHAMP;
                     level = 1;
-                    displayLevel(world,level);
+                    loadLevel(world,level);
+                    displayLevel(level-1);
                     break;
                 case '3':
                     world = WORLD_PRO;
                     level = 1;
-                    displayLevel(world,level);
+                    loadLevel(world,level);
+                    displayLevel(level-1);
                     break;
                 case '4':
                     world = WORLD_FANBOOK;
                     level = 1;
-                    displayLevel(world,level);
+                    loadLevel(world,level);
+                    displayLevel(level-1);
                     break;
                 case '5':
                     world = WORLD_REVENGE;
                     level = 1;
-                    displayLevel(world,level);
+                    loadLevel(world,level);
+                    displayLevel(level-1);
                     break;
                 default:
                     break;
@@ -97,6 +107,6 @@ int main()
 
     } while (1);
     cgetc();
-
+#endif
     return result;
 }

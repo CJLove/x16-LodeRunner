@@ -3,10 +3,11 @@
 #include <conio.h>
 #include <unistd.h>
 #include "loderunner.h"
+#include "runner.h"
 
 // Test application which tests animation of runner and guard
 
-void displayPos(uint16_t x, uint16_t y)
+void displayRPos(uint16_t x, uint16_t y)
 {
     char buffer[10];
     sprintf(buffer,"%3d",x);
@@ -37,10 +38,12 @@ int main()
     uint8_t level = 1;
     uint16_t x = 112;
     uint16_t y = 112;
+    uint8_t dx = 1;
+    uint8_t dy = 1;
     uint8_t flip = 0;
     uint8_t run[] = { 0, 1, 2 };
     uint8_t climb[] = { 3, 4 };
-    uint8_t rapell[] = { 6, 7, 8 };
+    uint8_t rappel[] = { 6, 7, 8 };
     uint8_t idx = 0;
     uint8_t isRunning = 0;
     uint8_t dir = 0;    // Right (corresponds to flip bit)
@@ -57,7 +60,14 @@ int main()
 
     screenConfig();
 
-    displayLevel(world,level);
+    loadLevel(world,level);
+    displayLevel(level-1);
+
+    do {
+        moveRunner();
+    } while (1);
+
+#if 0    
     setTile(14,14,TILE_BLANK,0);    // Hide the runner tile
 
     // Sprite attributes for runner
@@ -72,7 +82,7 @@ int main()
     // Enable
     vpoke(0x01, 0x1f4000);
 
-    displayPos(x,y);
+    displayRPos(x,y);
 
     do {
         if (kbhit()) {
@@ -83,7 +93,7 @@ int main()
             {
                 case 'i':
                     if (tile == TILE_LADDER || tileBelow == TILE_LADDER) {
-                        y=y-1;
+                        y=y-dy;
                     }
                     idx++;
                     idx = idx % 2;
@@ -93,7 +103,7 @@ int main()
                     break;
                 case 'm':
                     if (tile == TILE_LADDER || tileBelow == TILE_LADDER) {
-                        y=y+1;
+                        y=y+dy;
                     }
                     idx++;
                     idx = idx %2;
@@ -111,11 +121,11 @@ int main()
                         idx++;
                         idx = idx % 3;
                         if (tile == TILE_ROPE) {
-                            vpoke(rapell[idx],0x1f5000);
+                            vpoke(rappel[idx],0x1f5000);
                         } else {
                             vpoke(run[idx],0x1f5000);
                         }
-                        x=x+1;
+                        x=x+dx;
                         vpoke(x & 0xff, 0x1f5002);
                         VERA.data0 = x >> 8;
                     }
@@ -130,11 +140,11 @@ int main()
                         idx++;
                         idx = idx % 3;
                         if (tile == TILE_ROPE) {
-                            vpoke(rapell[idx],0x1f5000);
+                            vpoke(rappel[idx],0x1f5000);
                         } else {
                             vpoke(run[idx],0x1f5000);
                         }
-                        x=x-1;
+                        x=x-dx;
                         vpoke(x & 0xff, 0x1f5002);
                         VERA.data0 = x >> 8;
                     }
@@ -147,13 +157,13 @@ int main()
             setTile(38,1,tile,0);
             tileBelow = getTileBelowXY(x,y);
             setTile(38,3,tileBelow,0);
-            displayPos(x,y);
+            displayRPos(x,y);
         }
 
 
 
     } while (1);
     cgetc();
-
+#endif
     return result;
 }

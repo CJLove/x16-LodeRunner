@@ -23,6 +23,17 @@ int screenConfig()
     return 1;
 }
 
+void screenReset()
+{
+    vpoke(1,0xf3000);
+    VERA.data0 = 6;
+    VERA.data0 = 0;
+    VERA.data0 = 0;
+    VERA.data0 = 0;
+    VERA.data0 = 0x3e;
+}
+
+
 void setTile(uint8_t x, uint8_t y, uint8_t tile, uint8_t paletteOffset)
 {
     vpoke(tile, y*OFFSET + x*2);
