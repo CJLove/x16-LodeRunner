@@ -22,7 +22,7 @@ int main()
         return result;
     }
 
-#if 1
+#if 0
     VIA1.pra = 1;
     loadLevel(WORLD_CLASSIC,level);
     dumpLevel(level);

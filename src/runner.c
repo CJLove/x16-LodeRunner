@@ -39,6 +39,32 @@ static uint8_t runnerSequences[MAX_SEQUENCE][MAX_SEQ_LENGTH] = {
 
 static uint8_t runnerSeqSizes[MAX_SEQUENCE] = {RUN_LENGTH, CLIMB_LENGTH, RAPPEL_LENGTH, FALL_LENGTH};
 
+#define DIG_LENGTH 12
+#define DIG_UPPER 0
+#define DIG_LOWER 1
+
+static uint8_t digLeft[2][DIG_LENGTH] = {
+    // DIG_UPPER
+    { TILE_BLANK, TILE_DIG_LEFT_U1, TILE_DIG_LEFT_U1, TILE_DIG_LEFT_U2, 
+      TILE_DIG_LEFT_U2, TILE_DIG_LEFT_U3, TILE_DIG_LEFT_U4, TILE_DIG_LEFT_U4, 
+      TILE_DIG_LEFT_U5, TILE_DIG_LEFT_U6, TILE_DIG_LEFT_U6, TILE_BLANK },
+    // DIG_LOWER
+    { TILE_BRICK, TILE_DIG_LEFT_L1, TILE_DIG_LEFT_L1, TILE_DIG_LEFT_L2, 
+      TILE_DIG_LEFT_L2, TILE_DIG_LEFT_L3, TILE_DIG_LEFT_L4, TILE_DIG_LEFT_L4,
+      TILE_DIG_LEFT_L5, TILE_DIG_LEFT_L6, TILE_DIG_LEFT_L6, TILE_BLANK },
+};
+
+static uint8_t digRight[2][DIG_LENGTH] = {
+    // DIG_UPPER
+    { TILE_BLANK, TILE_DIG_RIGHT_U1, TILE_DIG_RIGHT_U1, TILE_DIG_RIGHT_U2, 
+      TILE_DIG_RIGHT_U2, TILE_DIG_RIGHT_U3, TILE_DIG_RIGHT_U4, TILE_DIG_RIGHT_U4,
+      TILE_DIG_RIGHT_U5, TILE_DIG_RIGHT_U6, TILE_DIG_RIGHT_U6, TILE_BLANK },
+    // DIG_LOWER
+    { TILE_BRICK, TILE_DIG_RIGHT_L1, TILE_DIG_RIGHT_L1, TILE_DIG_RIGHT_L2, 
+      TILE_DIG_RIGHT_L2, TILE_DIG_RIGHT_L3, TILE_DIG_RIGHT_L4, TILE_DIG_RIGHT_L4,
+      TILE_DIG_RIGHT_L5, TILE_DIG_RIGHT_L6, TILE_DIG_RIGHT_L6, TILE_BLANK },
+};
+
 #define STATE_OK_TO_MOVE 1
 #define STATE_FALLING 2
 
@@ -98,12 +124,28 @@ void displayTiles(uint8_t x, uint8_t y)
     }
 }
 
+// Debug: display state regarding runner movement
 void displayState(uint8_t state, uint8_t stay, uint8_t act)
 {
     setTile(34,4,state+48,0);
     setTile(36,4,stay+48,0);
     setTile(38,4,act+48,0);
+}
 
+// Debug: display state regarding digging
+void displayDig()
+{
+    char buffer[15];
+    uint8_t i = 0;
+    if (hole.action) {
+        sprintf(buffer,"%c:%1d %2d %2d %2d",1,hole.action, hole.idx, hole.x, hole.y);
+        // Format: "A:x xx xx xx"
+    } else {
+        memset(buffer,32,sizeof(buffer));
+    }
+    for (i = 0; i < 12; i++) {
+        setTile(28+i,10,buffer[i],0);
+    }
 }
 
 void decGold()
@@ -128,6 +170,32 @@ void addGold(uint8_t x, uint8_t y)
     map[x][y].base = TILE_GOLD;
     setTile(x,y,TILE_GOLD,0);
 }
+
+uint8_t ok2dig(uint8_t action)
+{
+    uint8_t x = runner.x;
+    uint8_t y = runner.y;
+    uint8_t rc = 0;
+    switch (action) {
+        case ACT_DIG_LEFT:
+            if (y < MAX_TILE_Y && x > 0 && map[x-1][y+1].act == TILE_BRICK && map[x-1][y].act == TILE_BLANK && map[x-1][y].base != TILE_GOLD) {
+                rc = 1;
+            }
+            break;
+        case ACT_DIG_RIGHT:
+            if (y < MAX_TILE_Y && x < MAX_TILE_X && map[x+1][y+1].act == TILE_BRICK && map[x+1][y].act == TILE_BLANK && map[x+1][y].base != TILE_GOLD) {
+                rc = 1;
+            }
+            setTile(38,23,TILE_GOLD,0);
+            break;
+        default:
+            break;
+    }
+    setTile(38,24,rc+48,0);
+    return rc;
+}
+
+
 
 void clearRunner() { memset(&runner, 0, sizeof(runner)); }
 
@@ -178,7 +246,6 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
     switch (action) {
         case ACT_DIG_LEFT:
         case ACT_DIG_RIGHT:
-            // TODO
             xOffset = 0;
             yOffset = 0;
             break;
@@ -442,6 +509,49 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
     }
 }
 
+void digHole(uint8_t action)
+{
+    uint8_t x = 0;
+    uint8_t y = 0;
+    if (action == ACT_DIG_LEFT) {
+        x = runner.x-1;
+        y = runner.y;
+    } else { // Dig right
+        x = runner.x+1;
+        y = runner.y;
+    }
+    hole.action = action;
+    hole.x = x;
+    hole.y = y;
+    hole.idx = 0;
+}
+
+void fillHole(uint8_t x, uint8_t y)
+{
+    uint8_t i = 0;
+    for (i = 0; i < MAX_HOLES; i++) {
+        if (!holes[i].active) {
+            holes[i].active = 1;
+            holes[i].x = x;
+            holes[i].y = y;
+            holes[i].count = 0;
+            break;
+        }
+    }
+}
+
+void digComplete()
+{
+    uint8_t x = hole.x;
+    uint8_t y = hole.y+1;
+    map[x][y].act = TILE_BLANK;
+    // No longer digging
+    hole.action = ACT_STOP;
+
+    fillHole(x,y);
+}
+
+// Routine called by main loop to move the runner
 void moveRunner()
 {
     uint8_t x = runner.x;
@@ -550,8 +660,13 @@ void moveRunner()
             break;
         case ACT_DIG_LEFT:
         case ACT_DIG_RIGHT:
-            // TODO
-            break;
+            if (ok2dig(act)) {
+                runnerMoveStep(act, stayCurrentPos);
+                digHole(act);
+            } else {
+                runnerMoveStep(ACT_STOP, stayCurrentPos);
+            }
+            return;
         default:
             break;
     }
@@ -561,3 +676,93 @@ void moveRunner()
     runnerMoveStep(moveStep, stayCurrentPos);
 }
 
+void fillComplete(uint8_t holeIdx)
+{
+    uint8_t x = holes[holeIdx].x;
+    uint8_t y = holes[holeIdx].y;
+    switch (map[x][y].act) {
+        case TILE_RUNNER:
+            // Runner dead
+            gameState = GAME_RUNNER_DEAD;
+            break;
+        case TILE_GUARD:
+            // Guard dead
+            break;
+    }
+    // Restore the tile in the map
+    map[x][y].act = TILE_BRICK;
+    // Hole is no longer active
+    holes[holeIdx].active = 0;
+}
+
+// Routine called by the main loop to fill holes dug by the runner
+void processFillHole()
+{
+    uint8_t i = 0;
+    for (i = 0; i < MAX_HOLES; i++) {
+        if (holes[i].active) {
+            uint8_t x = holes[i].x;
+            uint8_t y = holes[i].y;
+            holes[i].count++;
+            if (holes[i].count == 1) {
+                // Clear the blast debris from the tile above the hole
+                setTile(x,y-1,TILE_BLANK,0);
+            } else if (holes[i].count == HOLE_REGEN1) {
+                setTile(x,y,TILE_REGEN1,0);
+            } else if (holes[i].count == HOLE_REGEN2) {
+                setTile(x,y,TILE_REGEN2,0);
+            } else if (holes[i].count == HOLE_REGEN3) {
+                setTile(x,y,TILE_REGEN3,0);
+            } else if (holes[i].count == HOLE_REGEN4) {
+                setTile(x,y,TILE_BRICK,0);
+                fillComplete(i);
+            }
+        }
+    }
+
+}
+
+uint8_t isDigging()
+{
+    uint8_t rc = 0;
+    // Debug: display info regarding any dig currently in process
+    displayDig();
+    if (hole.action != ACT_STOP) {
+        uint8_t x = hole.x;
+        uint8_t y = hole.y;
+        if (map[x][y].act == TILE_GUARD) {
+            // TODO: Check if guard is too close to the digging
+
+            // stopDigging(x,y);
+
+            map[x][y].act = TILE_BLANK; // assume hole complete
+            rc = 1;
+        } else {
+            // No need to change runner image (run left or run right)
+            runner.action = ACT_STOP;
+            rc = 1;
+        }
+    }
+    return rc;
+}
+
+void processDigHole()
+{
+    // Do nothing if we aren't digging
+    if (hole.action == ACT_STOP) return;
+
+    hole.idx++;
+    if (hole.idx < DIG_LENGTH) {
+        if (hole.action == ACT_DIG_LEFT) {
+            setTile(hole.x,hole.y,digLeft[DIG_UPPER][hole.idx],0);
+            setTile(hole.x,hole.y+1,digLeft[DIG_LOWER][hole.idx],0);
+        } else {
+            setTile(hole.x,hole.y,digRight[DIG_UPPER][hole.idx],0);
+            setTile(hole.x,hole.y+1,digRight[DIG_LOWER][hole.idx],0);
+        }
+        setTile(38,27,hole.idx+48,0);
+    } else {
+        digComplete();
+    }
+
+}

@@ -6,24 +6,79 @@
 #include "runner.h"
 #include "levels.h"
 
-int mainloop() {
+// Main loop while playing the game
+void playGame() {
+    if (goldComplete && runner.y == 0 && runner.yOffset == 0) {
+        gameState = GAME_FINISH;
+        return;
+    }
 
-    // Enable
-    vpoke(0x01, 0x1f4000);
-    
-    do {
+    if (!isDigging()) {
         moveRunner();
+    } else {
+        processDigHole();
+    }
+    // TODO: if (gameState != GAME_RUNNER_DEAD) moveGuard();
 
-    } while (1);
+    // TODO: processGuardShake();
+    processFillHole();
+    // TODO: processReborn();
+}
 
-    return 0;
+void mainTick()
+{
+    switch(gameState) {
+        case GAME_RUNNING:
+            playGame();
+            break;
+        case GAME_NEW_LEVEL:
+            loadLevel(world,level);
+            displayLevel(level-1);
+            // Enable sprites
+            vpoke(0x01, 0x1f4000);
+            gameState = GAME_RUNNING;
+            break;
+        case GAME_FINISH:
+            // Disable sprites
+            vpoke(0x0, 0x1f4000);
+            // Increase score for level completion
+            displayScore(SCORE_COMPLETE_LEVEL);
+            
+            gameState = GAME_NEXT_LEVEL;
+            break;
+        case GAME_NEXT_LEVEL:
+            level++;
+            gameState = GAME_NEW_LEVEL;
+            break;
+        case GAME_PREV_LEVEL:
+            if (level) level--;
+            gameState = GAME_NEW_LEVEL;
+            break;
+        case GAME_RUNNER_DEAD:
+            lives--;
+            if (lives <= 0) {
+                // TODO: Game Over
+                gameState = GAME_OVER;
+            } else {
+                gameState = GAME_NEW_LEVEL;
+            }
+            break;
+        case GAME_OVER:
+            // TODO: Game Over
+            break;
+        default:
+            break;
+    }
 }
 
 int main()
 {
-    uint8_t world = WORLD_CLASSIC;
-    uint8_t level = 1;
     uint8_t result = 0;
+
+    world = WORLD_CLASSIC;
+    level = 1;
+    gameState = GAME_NEW_LEVEL;
+    lives = 5;
 
     printf("Loading resources...\n");
     
@@ -42,9 +97,14 @@ int main()
 
     loadLevel(world,level);
     displayLevel(level-1);
+    // Enable sprites
+    vpoke(0x01, 0x1f4000);
 
     do {
-        mainloop();
+        // Wait for next VSYNC interrupt
+        waitvsync();
+
+        mainTick();
 
     } 
     while (1);

@@ -16,14 +16,37 @@
 #define TILE_HIDDEN 68
 #define TILE_ROPE   69
 #define TILE_GOLD   70
-#define TILE_HOLE   71
-#define TILE_REGEN1 72
-#define TILE_REGEN2 73
-#define TILE_REGEN3 74
-#define TILE_BLAST  75
-#define TILE_GROUND 76
-#define TILE_BLANK  32
+#define TILE_GROUND 71
+#define TILE_DIG_LEFT_U1 72
+#define TILE_DIG_LEFT_L1 73
+#define TILE_DIG_LEFT_U2 74
+#define TILE_DIG_LEFT_L2 75
+#define TILE_DIG_LEFT_U3 76
+#define TILE_DIG_LEFT_L3 77
+#define TILE_DIG_LEFT_U4 78
+#define TILE_DIG_LEFT_L4 79
+#define TILE_DIG_LEFT_U5 80
+#define TILE_DIG_LEFT_L5 81
+#define TILE_DIG_LEFT_U6 82
+#define TILE_DIG_LEFT_L6 83
 
+#define TILE_DIG_RIGHT_U1 84
+#define TILE_DIG_RIGHT_L1 85
+#define TILE_DIG_RIGHT_U2 86
+#define TILE_DIG_RIGHT_L2 87
+#define TILE_DIG_RIGHT_U3 88
+#define TILE_DIG_RIGHT_L3 89
+#define TILE_DIG_RIGHT_U4 90
+#define TILE_DIG_RIGHT_L4 91
+#define TILE_DIG_RIGHT_U5 92
+#define TILE_DIG_RIGHT_L5 93
+#define TILE_DIG_RIGHT_U6 94
+#define TILE_DIG_RIGHT_L6 95
+#define TILE_REGEN1 96
+#define TILE_REGEN2 97
+#define TILE_REGEN3 98
+
+#define TILE_BLANK  32
 #define TILE_GUARD  36
 #define TILE_RUNNER 37
 
@@ -75,10 +98,27 @@
 #define ACT_CLIMB_OUT   11
 #define ACT_REBORN      12
 
+// Score increments
 #define SCORE_GET_GOLD      250
 #define SCORE_IN_HOLE       75
 #define SCORE_GUARD_DEAD    75
+#define SCORE_COMPLETE_LEVEL    1500
 
+// Hole regeneration timing
+#define HOLE_REGEN1     256
+#define HOLE_REGEN2     264
+#define HOLE_REGEN3     272
+#define HOLE_REGEN4     284
+
+// Game states
+#define GAME_RUNNING 1
+#define GAME_NEW_LEVEL 2
+#define GAME_NEXT_LEVEL 3
+#define GAME_PREV_LEVEL 4
+#define GAME_RUNNER_DEAD 5
+#define GAME_FINISH 6
+#define GAME_WIN 7
+#define GAME_OVER 8
 
 // Declarations of all functions
 

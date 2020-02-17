@@ -22,12 +22,35 @@ static const uint8_t tileMap[] = {
 // Map of data for the current level
 struct map_t map[NO_OF_TILES_X][NO_OF_TILES_Y];
 
+// State information for holes dug by the runner
+struct hole_t holes[MAX_HOLES];
+
+// State information for hole being dug by the runner
+struct dig_t hole;
+
 // Count of gold pieces on the current level
 uint8_t goldCount;
+
+// Indicator that gold collection is complete for the current level
+uint8_t goldComplete;
 
 // Current game score
 uint32_t currentScore;
 
+// Number of lives
+uint8_t lives;
+
+// State of the game
+uint8_t gameState;
+
+// Current level
+uint8_t level = 1;
+
+// Current world
+uint8_t world = WORLD_CLASSIC;
+
+
+// Tiles for text on the status line 
 static const uint8_t labelScore[] = {19, 3, 15, 18, 5};
 static const uint8_t labelMen[] = {13, 5, 14};
 static const uint8_t labelLevel[] = {12, 5, 22, 5, 12};
@@ -46,6 +69,7 @@ void completeLevel()
             }
         }
     }
+    goldComplete = 1;
 }
 
 void displayScore(uint32_t addScore)
@@ -94,6 +118,7 @@ void displayStatus(uint32_t score, uint8_t men, uint8_t level)
 int loadLevel(uint8_t world, uint8_t level)
 {
     uint8_t max = 0;
+    uint8_t i = 0;
     // Switch to bank corresponding to the desired world and level
     uint8_t bank = world + (level / 36);
     uint8_t foundRunner = 0;
@@ -101,8 +126,14 @@ int loadLevel(uint8_t world, uint8_t level)
     VIA1.pra = bank;
 
     max = *(uint8_t *)(LEVEL_COUNT + 1);
+    // Clear the runner, gold count, and all state info regarding
+    // digging in progress or holes
     clearRunner();
     goldCount = 0;
+    for (i = 0; i < MAX_HOLES; i++) {
+        holes[i].active = 0;
+    }
+    hole.action = ACT_STOP;
 
     level--;  // zero-based indexing for level data
     if (level < max) {
@@ -131,6 +162,10 @@ int loadLevel(uint8_t world, uint8_t level)
                         map[idx * 2][row].base = TILE_BLANK;
                         map[idx * 2][row].act = TILE_RUNNER;
                         break;
+                    case TILE_HIDDEN:
+                        map[idx * 2][row].base = tile1;
+                        map[idx * 2][row].act = TILE_BLANK;
+                        break;
                     case TILE_GOLD:
                         goldCount++;
                         // Fall through
@@ -153,6 +188,10 @@ int loadLevel(uint8_t world, uint8_t level)
                         }
                         map[idx * 2 + 1][row].base = TILE_BLANK;
                         map[idx * 2 + 1][row].act = TILE_RUNNER;
+                        break;
+                    case TILE_HIDDEN:
+                        map[idx * 2 + 1][row].base = tile2;
+                        map[idx * 2 + 1][row].act = TILE_BLANK;
                         break;
                     case TILE_GOLD:
                         goldCount++;
@@ -193,7 +232,7 @@ int displayLevel(uint8_t level)
     for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
         setTile(col, LEVEL_ROW_COUNT, TILE_GROUND, 0);
     }
-    displayStatus(0, 0, level);
+    displayStatus(0, lives, level);
 
     return 1;
 
