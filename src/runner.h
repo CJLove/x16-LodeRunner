@@ -24,8 +24,8 @@ struct runner_t {
 
 extern struct runner_t runner;
 
-void clearRunner(void);
-void initRunner(uint8_t x, uint8_t y);
+extern void clearRunner(void);
+extern void initRunner(uint8_t x, uint8_t y);
 
 // Entry point from main loop to move the runner
 extern void moveRunner(void);

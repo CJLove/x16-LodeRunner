@@ -1,5 +1,6 @@
 
 #include "runner.h"
+#include "guard.h"
 #include "key.h"
 #include "levels.h"
 #include "loderunner.h"
@@ -186,12 +187,10 @@ uint8_t ok2dig(uint8_t action)
             if (y < MAX_TILE_Y && x < MAX_TILE_X && map[x+1][y+1].act == TILE_BRICK && map[x+1][y].act == TILE_BLANK && map[x+1][y].base != TILE_GOLD) {
                 rc = 1;
             }
-            setTile(38,23,TILE_GOLD,0);
             break;
         default:
             break;
     }
-    setTile(38,24,rc+48,0);
     return rc;
 }
 
@@ -680,13 +679,31 @@ void fillComplete(uint8_t holeIdx)
 {
     uint8_t x = holes[holeIdx].x;
     uint8_t y = holes[holeIdx].y;
+
+    // Debug: show the tile for anything currently in the hole
+    //setTile(1,20,map[x][y].act,0);
+
     switch (map[x][y].act) {
         case TILE_RUNNER:
             // Runner dead
             gameState = GAME_RUNNER_DEAD;
             break;
         case TILE_GUARD:
-            // Guard dead
+            {
+                // Guard dead
+                int8_t id = guardId(x,y);
+                removeFromShake(id);
+                if (id != -1) {
+                    // Debug: show the id of the dead guard
+                    //setTile(1,21,id+48,0);
+                    if (guard[id].hasGold > 0) {
+                        // decGold();
+                        guard[id].hasGold = 0;
+                    }
+                }
+                guardReborn(x,y);
+                displayScore(SCORE_GUARD_DEAD);
+            }
             break;
     }
     // Restore the tile in the map

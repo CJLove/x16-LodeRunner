@@ -1,6 +1,7 @@
 #include "levels.h"
 #include "loderunner.h"
 #include "runner.h"
+#include "guard.h"
 #include <cx16.h>
 #include <stdio.h>
 
@@ -129,6 +130,7 @@ int loadLevel(uint8_t world, uint8_t level)
     // Clear the runner, gold count, and all state info regarding
     // digging in progress or holes
     clearRunner();
+    clearGuards();
     goldCount = 0;
     for (i = 0; i < MAX_HOLES; i++) {
         holes[i].active = 0;
@@ -150,8 +152,14 @@ int loadLevel(uint8_t world, uint8_t level)
                 switch (tile1) {
                     case TILE_GUARD:
                         // TODO: Initiaze guard and set tile as blank
-                        map[idx * 2][row].act = tile1;
-                        map[idx * 2][row].base = tile1;
+                        map[idx * 2][row].act = TILE_GUARD;
+                        map[idx * 2][row].base = TILE_BLANK;
+                        if (guardCount == MAX_GUARDS) {
+                            // Too many guards
+                            map[idx * 2][row].act = TILE_BLANK;
+                            continue;
+                        }
+                        initGuard(idx*2,row);
                         break;
                     case TILE_RUNNER:
                         // If runner hasn't been found yet, then initialize
@@ -177,8 +185,14 @@ int loadLevel(uint8_t world, uint8_t level)
                 switch (tile2) {
                     case TILE_GUARD:
                         // TODO: Initiaze guard and set tile as blank
-                        map[idx * 2 + 1][row].act = tile2;
-                        map[idx * 2 + 1][row].base = tile2;
+                        map[idx * 2 + 1][row].act = TILE_GUARD;
+                        map[idx * 2 + 1][row].base = TILE_BLANK;
+                        if (guardCount == MAX_GUARDS) {
+                            // Too many guards
+                            map[idx * 2 + 1][row].act = TILE_BLANK;
+                            continue;
+                        }
+                        initGuard(idx*2+1,row);
                         break;
                     case TILE_RUNNER:
                         // If runner hasn't been found yet, then initialize

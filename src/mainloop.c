@@ -1,9 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <cx16.h>
 #include <conio.h>
+#include <cbm.h>
 #include <unistd.h>
 #include "loderunner.h"
 #include "runner.h"
+#include "guard.h"
 #include "levels.h"
 
 // Main loop while playing the game
@@ -18,9 +21,9 @@ void playGame() {
     } else {
         processDigHole();
     }
-    // TODO: if (gameState != GAME_RUNNER_DEAD) moveGuard();
+    if (gameState != GAME_RUNNER_DEAD) moveGuard();
 
-    // TODO: processGuardShake();
+    processGuardShake();
     processFillHole();
     // TODO: processReborn();
 }
@@ -74,11 +77,22 @@ void mainTick()
 int main()
 {
     uint8_t result = 0;
+   // Read VIA register in memory as a seed
+    uint16_t *seed = (uint16_t *)0x9f64;
+
+    srand(*seed);
+
+    // Not supported for CX16
+    // kbrepeat(KBREPEAT_ALL);
 
     world = WORLD_CLASSIC;
+    // Test world for benchmarks and isolated testing
+    //world = WORLD_CUSTOM;
     level = 1;
     gameState = GAME_NEW_LEVEL;
     lives = 5;
+
+ 
 
     printf("Loading resources...\n");
     

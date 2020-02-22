@@ -84,5 +84,8 @@ int loadFiles()
         return 0;
     }
 
+    // Load Custom levels to bank 16
+    result = load_bank_host("custom.bin",16);
+
     return (result != 0);
 }

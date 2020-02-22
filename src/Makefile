@@ -5,7 +5,7 @@ LIBRARIES := ../libX16/lib
 INCLUDE := ../libX16/include
 
 SRC = \
-	loader.c screen.c levels.c runner.c key.c
+	loader.c screen.c levels.c runner.c key.c guard.c
 
 OBJ = $(SRC:%.c=%.o)
 
@@ -51,6 +51,10 @@ FANBOOK.BIN: ../assets/fanbook.json
 
 REVENGE.BIN: ../assets/revenge.json
 	../scripts/levels.py --input ../assets/revenge.json --output REVENGE.BIN
+
+CUSTOM.BIN: ../assets/custom.json
+	../scripts/levels.py --input ../assets/custom.json --output CUSTOM.BIN
+
 
 SPRITES.BIN: ../assets/sprites.txt ../scripts/graphic.py
 	../scripts/graphic.py --input ../assets/sprites.txt --output SPRITES.BIN --x 8 --y 8 --bpp 4 --addr e000

@@ -50,10 +50,6 @@
 #define TILE_GUARD  36
 #define TILE_RUNNER 37
 
-// Bank definitions
-#define BANK_CLASSIC    1
-#define BANK_FANBOOK    2
-
 // Level definitions
 #define LEVEL_COUNT 0xa000
 #define LEVEL_BASE  0xa002
@@ -82,6 +78,8 @@
 #define GUARD_RAPPEL_2  0x11e200
 #define GUARD_RAPPEL_3  0x11e220
 
+#define MAX_GUARDS 6
+
 // Actions
 #define ACT_UNKNOWN  -1
 #define ACT_STOP    0
@@ -104,11 +102,11 @@
 #define SCORE_GUARD_DEAD    75
 #define SCORE_COMPLETE_LEVEL    1500
 
-// Hole regeneration timing
-#define HOLE_REGEN1     256
-#define HOLE_REGEN2     264
-#define HOLE_REGEN3     272
-#define HOLE_REGEN4     284
+// Hole regeneration timixng
+#define HOLE_REGEN1     490
+#define HOLE_REGEN2     498
+#define HOLE_REGEN3     506
+#define HOLE_REGEN4     514
 
 // Game states
 #define GAME_RUNNING 1
