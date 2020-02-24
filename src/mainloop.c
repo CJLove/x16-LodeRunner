@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <cbm.h>
 #include <unistd.h>
+#include <joystick.h>
 #include "loderunner.h"
 #include "runner.h"
 #include "guard.h"
@@ -28,6 +29,9 @@ void playGame() {
     // TODO: processReborn();
 }
 
+static uint8_t scoreCount;
+
+
 void mainTick()
 {
     switch(gameState) {
@@ -45,9 +49,18 @@ void mainTick()
             // Disable sprites
             vpoke(0x0, 0x1f4000);
             // Increase score for level completion
-            displayScore(SCORE_COMPLETE_LEVEL);
+            scoreCount = 0;
+//            displayScore(SCORE_COMPLETE_LEVEL);
             
-            gameState = GAME_NEXT_LEVEL;
+            gameState = GAME_FINISH_SCORE_COUNT;
+            break;
+        case GAME_FINISH_SCORE_COUNT:
+            ++scoreCount;
+            displayScore(SCORE_INCREMENT);
+            if (scoreCount == SCORE_COUNT) {
+                lives++;
+                gameState = GAME_NEXT_LEVEL;
+            }
             break;
         case GAME_NEXT_LEVEL:
             level++;
@@ -77,10 +90,12 @@ void mainTick()
 int main()
 {
     uint8_t result = 0;
-   // Read VIA register in memory as a seed
+    // Read VIA register in memory as a seed
     uint16_t *seed = (uint16_t *)0x9f64;
-
     srand(*seed);
+
+    // Install CX16 joystick driver
+    joy_install(cx16_std_joy);
 
     // Not supported for CX16
     // kbrepeat(KBREPEAT_ALL);
@@ -109,8 +124,6 @@ int main()
 
     screenConfig();
 
-    loadLevel(world,level);
-    displayLevel(level-1);
     // Enable sprites
     vpoke(0x01, 0x1f4000);
 

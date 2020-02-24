@@ -2,6 +2,7 @@
 #include <cx16.h>
 #include <conio.h>
 #include <unistd.h>
+#include <joystick.h>
 #include "loderunner.h"
 #include "key.h"
 
@@ -21,6 +22,8 @@ int main()
         printf("Failed to load all resources\n");
         return result;
     }
+
+    joy_install(cx16_std_joy);
 
     do {
         int8_t act = keyAction();

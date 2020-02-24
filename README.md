@@ -14,3 +14,5 @@ This port is (so far :) ) being written in C using the [CC65](https://cc65.githu
 * `test_tiles.prg` - displays tiles (alphabetic characters, numbers, game tiles).  Hit any key to cycle through the tile animation for digging holes to left and right of runner.
 
 * `test_sprites.prg` - displays sprite images for the runner and guards (images are reversed as necessary for moving left)
+
+* `test_keys.prg` - displays values from key (joystick) input

@@ -2,6 +2,7 @@
 #include "loderunner.h"
 #include "runner.h"
 #include "guard.h"
+#include <cbm.h>
 #include <cx16.h>
 #include <stdio.h>
 
@@ -49,6 +50,9 @@ uint8_t level = 1;
 
 // Current world
 uint8_t world = WORLD_CLASSIC;
+
+// God mode
+uint8_t godMode = MORTAL;
 
 
 // Tiles for text on the status line 
@@ -132,6 +136,7 @@ int loadLevel(uint8_t world, uint8_t level)
     clearRunner();
     clearGuards();
     goldCount = 0;
+    goldComplete = 0;
     for (i = 0; i < MAX_HOLES; i++) {
         holes[i].active = 0;
     }
@@ -232,6 +237,12 @@ int displayLevel(uint8_t level)
 {
     uint8_t row = 0;
     uint8_t col = 0;
+    uint16_t hscroll = 240;
+
+    // Disable sprites
+    vpoke(0x00, 0x1f4000);
+    vpoke((hscroll & 0xff), 0xf3006);
+    vpoke(((hscroll & 0xf00) / 0x100), 0xf3007);
     
     for (row = 0; row < LEVEL_ROW_COUNT; row++) {
         for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
@@ -247,6 +258,18 @@ int displayLevel(uint8_t level)
         setTile(col, LEVEL_ROW_COUNT, TILE_GROUND, 0);
     }
     displayStatus(0, lives, level);
+
+    while (hscroll > 0) {
+        vpoke((hscroll & 0xff), 0xf3006);
+        vpoke(((hscroll & 0xf00) / 0x100), 0xf3007);        
+
+        hscroll -=4;
+        waitvsync();
+    }
+    vpoke(0,0xf3006);
+    vpoke(0,0xf3007);
+    // Enable sprites
+    vpoke(0x01, 0x1f4000);
 
     return 1;
 

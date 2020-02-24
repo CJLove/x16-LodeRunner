@@ -3,6 +3,7 @@
 #include <cbm.h>
 #include <conio.h>
 #include <unistd.h>
+#include <joystick.h>
 #include "loderunner.h"
 #include "levels.h"
 #include "runner.h"
@@ -26,6 +27,9 @@ int main()
         printf("Failed to load all resources\n");
         return result;
     }
+
+    // Install CX16 joystick driver
+    joy_install(cx16_std_joy);
 
     screenConfig();
 

@@ -138,7 +138,9 @@ void initGuard(uint8_t x, uint8_t y)
     VERA.data0 = (3 << 2);                                 // Attr6
     VERA.data0 = 0;                                        // Attr7
 
+#ifdef DEBUG
     // displayGuard(guardCount);
+#endif
     guardCount++;
 }
 
@@ -152,12 +154,23 @@ int8_t guardId(uint8_t x, uint8_t y)
     return -1;
 }
 
+int8_t guardAlive(uint8_t x, uint8_t y)
+{
+    int8_t i = 0;
+    for (i = 0; i < guardCount; i++) {
+        if (guard[i].x == x && guard[i].y == y) {
+            if (guard[i].action != ACT_REBORN) return 1;
+        }
+    }
+    return 0;
+}
+
 void rebornComplete(int8_t id)
 {
     uint8_t x = guard[id].x;
     uint8_t y = guard[id].y;
 
-    // if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+    if (map[x][y].act == TILE_RUNNER) setRunnerDead();
 
     map[x][y].act = TILE_GUARD;
     guard[id].action = ACT_FALL;
@@ -191,6 +204,31 @@ void guardReborn(uint8_t x, uint8_t y)
 
         rebornComplete(id);
     }
+}
+
+uint8_t dropGold(uint8_t id)
+{
+    struct guard_t *curGuard = &guard[id];
+    uint8_t nextToken = 0;
+    uint8_t drop = 0;
+
+    if (curGuard->hasGold > 1) {
+        // Decrease count but don't drop gold
+        curGuard->hasGold--;
+    } else if (curGuard->hasGold == 1) {
+        uint8_t x = curGuard->x;
+        uint8_t y = curGuard->y;
+        if (map[x][y].base == TILE_BLANK &&
+            (y >= MAX_TILE_Y || (nextToken = map[x][y+1].base) == TILE_BRICK ||
+            nextToken == TILE_BLOCK || nextToken == TILE_LADDER)) {
+            addGold(x,y);
+            curGuard->hasGold = -1;
+            drop = 1;
+        }
+    } else if (curGuard->hasGold < 0) {
+        curGuard->hasGold++;
+    }
+    return drop;
 }
 
 uint8_t bestRating = 0;
@@ -601,13 +639,11 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;
             y--;
             yOffset += TILE_H;
-            // if (map[x][y].act == TILE_RUNNER) {
-            //     setRunnerDead();
-            // }
+            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
         }
 
         if (yOffset <= 0 && yOffset > -1) {
-            // dropGold(id);
+            dropGold(id);
         }
         curGuard->sequence = CLIMB_SEQUENCE;
     }
@@ -643,14 +679,12 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;
             y++;
             yOffset -= TILE_H;
-            //          if (map[x][y].act == TILE_RUNNER) {
-            //            setRunnerDead();
-            //          }
+            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
         }
 
         // Drop gold while guard falls
         if ((action == ACT_FALL || action == ACT_DOWN) && yOffset >= 0 && yOffset < 1) {
-            // dropGold(id);
+            dropGold(id);
         }
 
         if (action == ACT_IN_HOLE) {
@@ -662,10 +696,10 @@ void guardMoveStep(uint8_t id, uint8_t action)
                 if (curGuard->hasGold > 0) {
                     if (map[x][y - 1].base == TILE_BLANK) {
                         // Drop gold above
-                        // addGold(x,y-1);
+                        addGold(x,y-1);
                     }
                     else {
-                        // decGold(); // Gold disappears
+                        decGold(); // Gold disappears
                     }
                     curGuard->hasGold = 0;
                 }
@@ -675,10 +709,10 @@ void guardMoveStep(uint8_t id, uint8_t action)
                 if (curGuard->hasGold > 0) {
                     if (map[x][y - 1].base == TILE_BLANK) {
                         // Drop ggold above
-                        // addGold(x,y-1);
+                        addGold(x,y-1);
                     }
                     else {
-                        // decGold(); // Gold disappears
+                        decGold(); // Gold disappears
                     }
                     curGuard->hasGold = 0;
                 }
@@ -721,10 +755,10 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;  // Runner move to [x-1][y], so set [x][y] to previous state
             x--;
             xOffset += TILE_W;
-            //            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
         }
         if (xOffset <= 0 && xOffset > -1) {
-            // dropGold(id);   // Try to drop gold
+            dropGold(id);   // Try to drop gold
         }
         if (curToken == TILE_ROPE)
             curGuard->sequence = RAPPEL_SEQUENCE;
@@ -750,10 +784,10 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;
             x++;
             xOffset = xOffset - TILE_W;
-            // if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
         }
         if (xOffset >= 0 && xOffset < 1) {
-            // dropGold(id);
+            dropGold(id);
         }
         if (curToken == TILE_ROPE)
             curGuard->sequence = RAPPEL_SEQUENCE;
@@ -802,7 +836,15 @@ void guardMoveStep(uint8_t id, uint8_t action)
     }
     map[x][y].act = TILE_GUARD;
 
-    // TODO: check if there is gold to pick up and cary
+    // check if there is gold to pick up and cary
+    if (map[x][y].base == TILE_GOLD && curGuard->hasGold == 0 &&
+        ((!xOffset && yOffset >= 0 && yOffset < H4) ||
+         (!yOffset && xOffset >= 0 && xOffset < W4) ||
+         (y < MAX_TILE_Y && map[x][y+1].base == TILE_LADDER && yOffset < H4)    // gold above ladder
+        )) {
+        curGuard->hasGold = rand() % 37;
+        removeGold(x,y);
+    }
 }
 
 void moveGuard()
@@ -830,7 +872,9 @@ void moveGuard()
         guardMoveStep(moveId, bestMove(moveId));
 
         // Debug: display guard position
+#ifdef DEBUG
         // displayGuard(moveId);
+#endif
     }
 }
 
@@ -891,8 +935,6 @@ void processGuardShake()
                 VERA.data0 = xPos >> 8;
 
                 shake[i].idx++;
-                // Debug: display the shake index as a tile
-                // setTile(1,20,shake[i].idx+48,0);
 
                 if (shake[i].idx == SHAKE_LENGTH) {
                     // Shake sequence complete

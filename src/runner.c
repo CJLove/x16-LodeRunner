@@ -76,12 +76,12 @@ void displayPos()
     uint8_t i = 0;
     sprintf(buffer, "%c:%2u %2d", 24, runner.x, runner.xOffset);
     for (i = 0; i < 10; i++) {
-        setTile(32 + i, 6, buffer[i], 0);
+        setTile(30 + i, 6, buffer[i], 0);
     }
 
     sprintf(buffer, "%c:%2u %2d", 25, runner.y, runner.yOffset);
     for (i = 0; i < 10; i++) {
-        setTile(32 + i, 8, buffer[i], 0);
+        setTile(30 + i, 8, buffer[i], 0);
     }
 }
 
@@ -149,9 +149,15 @@ void displayDig()
     }
 }
 
+void displayGold()
+{
+    setTile(38,20,goldCount+48,0);
+}
+
 void decGold()
 {
-    if (--goldCount <= 0) {
+    goldCount--;
+    if (goldCount <= 0) {
         completeLevel();
         if (runner.y > 0) {
             // TODO: Sound for finishing all gold
@@ -170,6 +176,12 @@ void addGold(uint8_t x, uint8_t y)
 {
     map[x][y].base = TILE_GOLD;
     setTile(x,y,TILE_GOLD,0);
+}
+
+void setRunnerDead()
+{
+    if (godMode != GOD_MODE)
+        gameState = GAME_RUNNER_DEAD;
 }
 
 uint8_t ok2dig(uint8_t action)
@@ -224,7 +236,9 @@ void initRunner(uint8_t x, uint8_t y)
 
     vpoke(0x01, 0x1f4000);
 
+#ifdef DEBUG
     displayPos();
+#endif
 }
 
 void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
@@ -286,8 +300,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             map[x][y].act = curToken;
             y--;
             yOffset = TILE_H + yOffset;
-            // TODO: guard check
-            // if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead();
+            if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead();
         }
         // shape = climb
         runner.sequence = CLIMB_SEQUENCE;
@@ -336,8 +349,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             map[x][y].act = curToken;
             y++;
             yOffset = yOffset - TILE_H;
-            // TODO:
-            // if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead()
+            if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead();
         }
 
         if (action == ACT_DOWN) {
@@ -383,7 +395,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             // Move to x-1 position
             if (curToken == TILE_BRICK || curToken == TILE_LADDER) {
                 // In hole or hidden ladder
-                //curToken = TILE_BLANK;
+                curToken = TILE_BLANK;
                 // Debug: show when we hit this condition
                 //setTile(38,21,50,0); // 2
             }
@@ -392,7 +404,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             x--;
             xOffset += TILE_W;
 
-            // if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead();
+            if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead();
         }
         if (curToken == TILE_ROPE) {
             runner.sequence = RAPPEL_SEQUENCE;
@@ -427,7 +439,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             // Move to x+1 position
             if (curToken == TILE_BRICK || curToken == TILE_LADDER) {
                 // In hole or hidden ladder
-                //curToken = TILE_BLANK;
+                curToken = TILE_BLANK;
                 // Debug: show when we hit this condition
                 //setTile(38,21,51,0); // 3
             }
@@ -435,7 +447,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             map[x][y].act = curToken; // runner move to [x+1][y], so set [x][y].act to previous state
             x++;
             xOffset -= TILE_W;
-            // if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead();
+            if (map[x][y].act == TILE_GUARD && guardAlive(x,y)) setRunnerDead();
         }
         if (curToken == TILE_ROPE) {
             runner.sequence = RAPPEL_SEQUENCE;
@@ -491,8 +503,9 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         runner.y = y;
         runner.xOffset = xOffset;
         runner.yOffset = yOffset;
-
+#ifdef DEBUG
         displayPos();
+#endif
     }
     if (action == ACT_LEFT || action == ACT_RIGHT) runner.direction = action;
     map[x][y].act = TILE_RUNNER;
@@ -504,7 +517,9 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         removeGold(x,y);
         decGold();
         displayScore(SCORE_GET_GOLD);
-        setTile(38,20,goldCount+48,0);
+#ifdef DEBUG        
+        displayGold();
+#endif
     }
 }
 
@@ -566,9 +581,10 @@ void moveRunner()
     uint8_t stayCurrentPos = 0;
     uint8_t moveStep = 0;
 
+#ifdef DEBUG
     displayPos();
     displayTiles(x,y);
-
+#endif
     if (curToken == TILE_LADDER || (curToken == TILE_ROPE && yOffset == 0)) {
         // OK to move (on ladder or bar)
         curState = STATE_OK_TO_MOVE;
@@ -604,9 +620,10 @@ void moveRunner()
         stayCurrentPos = (y >= MAX_TILE_Y || nextToken == TILE_BRICK || nextToken == TILE_BLOCK || nextToken == TILE_GUARD);
 
         // Debug: display state for falling runner
+#ifdef DEBUG
         displayState(curState,stayCurrentPos,ACT_FALL);
         displayPos();
-
+#endif
         runnerMoveStep(ACT_FALL, stayCurrentPos);
         return;
     }
@@ -670,8 +687,10 @@ void moveRunner()
             break;
     }
     // Debug: show moveStep and stayCurrentPos @ 36,4 and 38,4
-    //setTile(36, 4, moveStep + 48, 0);
+#ifdef DEBUG    
     displayState(curState,stayCurrentPos,moveStep);
+#endif
+
     runnerMoveStep(moveStep, stayCurrentPos);
 }
 
@@ -743,7 +762,9 @@ uint8_t isDigging()
 {
     uint8_t rc = 0;
     // Debug: display info regarding any dig currently in process
+#ifdef DEBUG    
     displayDig();
+#endif
     if (hole.action != ACT_STOP) {
         uint8_t x = hole.x;
         uint8_t y = hole.y;

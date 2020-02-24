@@ -30,7 +30,7 @@ struct guard_t {
     uint8_t sequence;
 
     // Guard has gold
-    uint8_t hasGold;
+    int8_t hasGold;
 };
 
 struct shakeGuard_t {
@@ -55,6 +55,7 @@ extern uint8_t guardCount;
 void clearGuards(void);
 void initGuard(uint8_t x, uint8_t y);
 int8_t guardId(uint8_t x, uint8_t y);
+int8_t guardAlive(uint8_t x, uint8_t y);
 void guardReborn(uint8_t x, uint8_t y);
 void removeFromShake(uint8_t id);
 

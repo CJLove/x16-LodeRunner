@@ -74,3 +74,5 @@ extern uint8_t gameState;
 extern uint8_t world;
 
 extern uint8_t level;
+
+extern uint8_t godMode;

@@ -27,6 +27,12 @@ extern struct runner_t runner;
 extern void clearRunner(void);
 extern void initRunner(uint8_t x, uint8_t y);
 
+extern void removeGold(uint8_t x, uint8_t y);
+extern void addGold(uint8_t x, uint8_t y);
+extern void decGold(void);
+
+extern void setRunnerDead(void);
+
 // Entry point from main loop to move the runner
 extern void moveRunner(void);
 

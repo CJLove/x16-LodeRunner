@@ -101,6 +101,8 @@
 #define SCORE_IN_HOLE       75
 #define SCORE_GUARD_DEAD    75
 #define SCORE_COMPLETE_LEVEL    1500
+#define SCORE_COUNT 15
+#define SCORE_INCREMENT (SCORE_COMPLETE_LEVEL / SCORE_COUNT)
 
 // Hole regeneration timixng
 #define HOLE_REGEN1     490
@@ -117,6 +119,11 @@
 #define GAME_FINISH 6
 #define GAME_WIN 7
 #define GAME_OVER 8
+#define GAME_FINISH_SCORE_COUNT 9
+
+// God mode (immortal runner)
+#define GOD_MODE 1
+#define MORTAL 0
 
 // Declarations of all functions
 

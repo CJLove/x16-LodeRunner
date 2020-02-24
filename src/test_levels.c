@@ -44,14 +44,11 @@ int main()
     loadLevel(world,level);
     displayLevel(level-1);
 
-    //completeLevel();
     do {
-        setTile(38,1,TILE_GOLD,0);
 
         if (kbhit()) {
 
             char c = cgetc();
-            setTile(38,2,TILE_GOLD,0);
             switch (c)
             {
                 case 'c':
@@ -102,8 +99,6 @@ int main()
             }
 
         }
-
-        setTile(38,3,TILE_GOLD,0);
 
     } while (1);
     cgetc();
