@@ -13,11 +13,19 @@ uint8_t lowerLeft[] = { TILE_BRICK, TILE_DIG_LEFT_L1, TILE_DIG_LEFT_L2, TILE_DIG
 uint8_t upperRight[] = { TILE_BLANK, TILE_DIG_RIGHT_U1, TILE_DIG_RIGHT_U2, TILE_DIG_RIGHT_U3, TILE_DIG_RIGHT_U4, TILE_DIG_RIGHT_U5, TILE_DIG_RIGHT_U6, TILE_BLANK, TILE_BLANK, TILE_BLANK, TILE_BLANK };
 uint8_t lowerRight[] = { TILE_BRICK, TILE_DIG_RIGHT_L1, TILE_DIG_RIGHT_L2, TILE_DIG_RIGHT_L3, TILE_DIG_RIGHT_L4, TILE_DIG_RIGHT_L5, TILE_DIG_RIGHT_L6, TILE_BLANK, TILE_REGEN1, TILE_REGEN2, TILE_REGEN3 };
 
+// Tiles for "GAME OVER"
+static const uint8_t gameOverTiles[3][11] = {
+    { 101, 100, 100, 100, 100, 100, 100, 100, 100, 100, 102 },
+    { 99, 7, 1, 13, 5, 32, 15, 22, 5, 18, 99 },
+    { 103, 100, 100, 100, 100, 100, 100, 100, 100, 100, 104 }
+};
+
 int main()
 {
     int result = 0;
     uint8_t idx = 0;
     uint8_t tile = 0;
+    uint8_t i = 0;
     printf("Loading resources...\n");
     
     result = loadFiles();
@@ -48,6 +56,12 @@ int main()
     // Level tiles
     for (tile = 0; tile < 8; tile++) {
         setTile(2*tile+2,11,tile+64,0);
+    }
+
+    for (i = 0; i < 11; i++) {
+        setTile(10+i,16,gameOverTiles[0][i],0);
+        setTile(10+i,17,gameOverTiles[1][i],0);
+        setTile(10+i,18,gameOverTiles[2][i],0);
     }
 
     // Test tile animation for hole digging/filling

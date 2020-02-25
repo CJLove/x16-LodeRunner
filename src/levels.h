@@ -76,3 +76,5 @@ extern uint8_t world;
 extern uint8_t level;
 
 extern uint8_t godMode;
+
+extern void gameOver(void);

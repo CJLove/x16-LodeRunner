@@ -5,6 +5,7 @@
 #include <cbm.h>
 #include <cx16.h>
 #include <stdio.h>
+#include <unistd.h>
 
 // The tileMap[] table maps a nibble (0-15) from
 // banked memory to the tile to be used in VRAM and
@@ -59,6 +60,13 @@ uint8_t godMode = MORTAL;
 static const uint8_t labelScore[] = {19, 3, 15, 18, 5};
 static const uint8_t labelMen[] = {13, 5, 14};
 static const uint8_t labelLevel[] = {12, 5, 22, 5, 12};
+
+// Tiles for "GAME OVER"
+static const uint8_t gameOverTiles[3][11] = {
+    { 101, 100, 100, 100, 100, 100, 100, 100, 100, 100, 102 },
+    { 99, 7, 1, 13, 5, 32, 15, 22, 5, 18, 99 },
+    { 103, 100, 100, 100, 100, 100, 100, 100, 100, 100, 104 }
+};
 
 void completeLevel()
 {
@@ -292,4 +300,17 @@ void dumpLevel(uint8_t level)
         printf("\n");
     }
     printf("Runner @ %d,%d\n",runner.x,runner.y);
+}
+
+
+
+void gameOver()
+{
+    uint8_t i = 0;
+    for (i = 0; i < 11; i++) {
+        setTile(10+i,7,gameOverTiles[0][i],0);
+        setTile(10+i,8,gameOverTiles[1][i],0);
+        setTile(10+i,9,gameOverTiles[2][i],0);
+    }
+    sleep(10);
 }

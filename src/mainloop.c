@@ -59,6 +59,7 @@ void mainTick()
             displayScore(SCORE_INCREMENT);
             if (scoreCount == SCORE_COUNT) {
                 lives++;
+                sleep(1);
                 gameState = GAME_NEXT_LEVEL;
             }
             break;
@@ -74,6 +75,7 @@ void mainTick()
             lives--;
             if (lives <= 0) {
                 // TODO: Game Over
+                gameOver();
                 gameState = GAME_OVER;
             } else {
                 gameState = GAME_NEW_LEVEL;

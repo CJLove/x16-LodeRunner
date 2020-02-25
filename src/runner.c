@@ -7,6 +7,7 @@
 #include <cx16.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 // Runner state information
 struct runner_t runner;
@@ -180,8 +181,10 @@ void addGold(uint8_t x, uint8_t y)
 
 void setRunnerDead()
 {
-    if (godMode != GOD_MODE)
+    if (godMode != GOD_MODE) {
         gameState = GAME_RUNNER_DEAD;
+        sleep(2);
+    }
 }
 
 uint8_t ok2dig(uint8_t action)
