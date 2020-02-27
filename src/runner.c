@@ -639,6 +639,9 @@ void moveRunner()
     // }
     stayCurrentPos = 1;
     switch (act) {
+        case ACT_START:
+            setRunnerDead();
+            break;
         case ACT_UP:
             nextToken = map[x][y - 1].act;
             stayCurrentPos = (y <= 0 || nextToken == TILE_BRICK || nextToken == TILE_BLOCK || nextToken == TILE_TRAP);

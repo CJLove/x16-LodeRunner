@@ -2,8 +2,8 @@
 - game playability
   - tuning of guard movement per tick
 - occasionally able to dig the brick below a ladder
-- occasionally able to run over a hole
-- level 16 issue
+- occasionally able to run over a hole that is about to be filled
+- level 16 issue: unable to climb into an unfilled hole from a ladder
 
 # Rough plans
 - Longer term: consider incorporating tilesets and concepts from LodeRunner Mad Monks Revenge
@@ -14,7 +14,6 @@
 
 # TODO
 - Handle case of guard too close to runner when digging
-- Game Over/
 - Code cleanup/reorg among files
 - TBD: refactoring to enable unit testing of core functions that aren't graphics-related
 

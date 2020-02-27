@@ -49,7 +49,9 @@ int8_t keyAction()
         act = ACT_LEFT;
     } else if (joy & JOY_RIGHT_MASK) {
         act = ACT_RIGHT;
-    } 
+    } else if (joy & JOY_BTN_4_MASK) {
+        act = ACT_START;
+    }
     // else if (joy) {
     //     printf("joy mask 0x%x\n",joy);
     // }

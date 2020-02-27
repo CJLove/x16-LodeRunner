@@ -5,7 +5,7 @@ LIBRARIES := ../libX16/lib
 INCLUDE := ../libX16/include
 
 SRC = \
-	loader.c screen.c levels.c runner.c key.c guard.c
+	loader.c screen.c levels.c runner.c key.c guard.c splash.c
 
 OBJ = $(SRC:%.c=%.o)
 
@@ -28,11 +28,18 @@ test_runner: test_runner.c $(SRC)
 test_tiles: test_tiles.c $(SRC)
 	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_tiles.prg test_tiles.c $(SRC) libX16.lib cx16.lib
 
+test_splash: test_splash.c $(SRC)
+	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_splash.prg test_splash.c $(SRC) libX16.lib cx16.lib
+
+
 test_sprites: test_sprites.c $(SRC)
 	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_sprites.prg test_sprites.c $(SRC) libX16.lib cx16.lib
 
 PALETTE.BIN: ../assets/palette.txt
 	../scripts/ascii2bin.py --input ../assets/palette.txt --output PALETTE.BIN --addr 1000
+
+SPLASH.BIN: ../assets/splash.txt
+	../scripts/ascii2bin.py --input ../assets/splash.txt --output SPLASH.BIN --addr a000
 
 TILES.BIN: ../assets/tiles.txt
 	../scripts/graphic.py --input ../assets/tiles.txt --output TILES.BIN --x 8 --y 8 --bpp 2 --addr 0000
@@ -62,4 +69,6 @@ SPRITES.BIN: ../assets/sprites.txt ../scripts/graphic.py
 clean:
 	rm -f *.prg *.o
 
-bins: CLASSIC.BIN CHAMP.BIN PRO.BIN FANBOOK.BIN REVENGE.BIN SPRITES.BIN TILES.BIN PALETTE.BIN
+all: bins lode_runner
+
+bins: CLASSIC.BIN CHAMP.BIN PRO.BIN FANBOOK.BIN REVENGE.BIN SPRITES.BIN TILES.BIN PALETTE.BIN CUSTOM.BIN SPLASH.BIN

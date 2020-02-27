@@ -97,7 +97,17 @@ void displayScore(uint32_t addScore)
     }
 }
 
-void displayStatus(uint32_t score, uint8_t men, uint8_t level)
+void displayLives()
+{
+    uint8_t col = 0;
+    char buffer[10];
+    snprintf(buffer, 10, "%03d", (int)lives);
+    for (col = 0; col < 3; col++) {
+        setTile(col + 16, LEVEL_ROW_COUNT + 1, buffer[col], 0);
+    }
+}
+
+void displayStatus(uint32_t score, uint8_t level)
 {
     uint8_t col = 0;
     char buffer[10];
@@ -113,10 +123,8 @@ void displayStatus(uint32_t score, uint8_t men, uint8_t level)
     for (col = 0; col < 3; col++) {
         setTile(col + 13, LEVEL_ROW_COUNT + 1, labelMen[col], 0);
     }
-    snprintf(buffer, 10, "%03d", (int)men);
-    for (col = 0; col < 3; col++) {
-        setTile(col + 16, LEVEL_ROW_COUNT + 1, buffer[col], 0);
-    }
+    displayLives();
+
     // LEVEL
     for (col = 0; col < 5; col++) {
         setTile(col + 20, LEVEL_ROW_COUNT + 1, labelLevel[col], 0);
@@ -265,7 +273,7 @@ int displayLevel(uint8_t level)
     for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
         setTile(col, LEVEL_ROW_COUNT, TILE_GROUND, 0);
     }
-    displayStatus(0, lives, level);
+    displayStatus(0, level);
 
     while (hscroll > 0) {
         vpoke((hscroll & 0xff), 0xf3006);
@@ -307,10 +315,12 @@ void dumpLevel(uint8_t level)
 void gameOver()
 {
     uint8_t i = 0;
+    // Disable sprites
+    vpoke(0x00, 0x1f4000);
     for (i = 0; i < 11; i++) {
-        setTile(10+i,7,gameOverTiles[0][i],0);
-        setTile(10+i,8,gameOverTiles[1][i],0);
-        setTile(10+i,9,gameOverTiles[2][i],0);
+        setTile(9+i,7,gameOverTiles[0][i],0);
+        setTile(9+i,8,gameOverTiles[1][i],0);
+        setTile(9+i,9,gameOverTiles[2][i],0);
     }
-    sleep(10);
+    sleep(5);
 }

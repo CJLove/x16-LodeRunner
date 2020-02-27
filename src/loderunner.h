@@ -8,6 +8,8 @@
 #define WORLD_REVENGE   15
 #define WORLD_CUSTOM    16
 
+#define SPLASH 21
+
 // Tile definitions
 #define TILE_BRICK  64
 #define TILE_BLOCK  65
@@ -95,6 +97,7 @@
 #define ACT_IN_HOLE     10
 #define ACT_CLIMB_OUT   11
 #define ACT_REBORN      12
+#define ACT_START       13
 
 // Score increments
 #define SCORE_GET_GOLD      250
@@ -111,6 +114,7 @@
 #define HOLE_REGEN4     514
 
 // Game states
+#define GAME_SPLASH 0
 #define GAME_RUNNING 1
 #define GAME_NEW_LEVEL 2
 #define GAME_NEXT_LEVEL 3
@@ -142,6 +146,8 @@ extern uint8_t getTileBelowXY (uint16_t x, uint16_t y);
 extern int loadLevel(uint8_t bank, uint8_t level);
 extern int displayLevel(uint8_t level);
 extern void dumpLevel(uint8_t level);
-extern void completeLevel();
+extern void completeLevel(void);
 extern void displayScore(uint32_t addScore);
+extern void displayLives(void);
 
+extern void splash(void);

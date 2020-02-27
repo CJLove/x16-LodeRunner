@@ -35,6 +35,9 @@ static uint8_t scoreCount;
 void mainTick()
 {
     switch(gameState) {
+        case GAME_SPLASH:
+            splash();
+            break;
         case GAME_RUNNING:
             playGame();
             break;
@@ -73,6 +76,7 @@ void mainTick()
             break;
         case GAME_RUNNER_DEAD:
             lives--;
+            displayLives();
             if (lives <= 0) {
                 // TODO: Game Over
                 gameOver();
@@ -82,7 +86,9 @@ void mainTick()
             }
             break;
         case GAME_OVER:
-            // TODO: Game Over
+            // Keep "Game Over" displayed for 5 seconds then go back to splash
+            sleep(5);
+            gameState = GAME_SPLASH;
             break;
         default:
             break;
@@ -106,7 +112,7 @@ int main()
     // Test world for benchmarks and isolated testing
     //world = WORLD_CUSTOM;
     level = 1;
-    gameState = GAME_NEW_LEVEL;
+    gameState = GAME_SPLASH;
     lives = 5;
 
  
@@ -127,7 +133,7 @@ int main()
     screenConfig();
 
     // Enable sprites
-    vpoke(0x01, 0x1f4000);
+    //vpoke(0x01, 0x1f4000);
 
     do {
         // Wait for next VSYNC interrupt

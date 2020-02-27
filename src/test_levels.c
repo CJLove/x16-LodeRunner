@@ -35,6 +35,8 @@ int main()
                 level++;
                 loadLevel(WORLD_CLASSIC,level);
                 dumpLevel(level);
+            } else {
+                printf("getc() %d\n",c);
             }
         }
     } while(1);

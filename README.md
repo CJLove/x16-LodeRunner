@@ -6,6 +6,11 @@ This port is (so far :) ) being written in C using the [CC65](https://cc65.githu
 
 ![](runner.gif)
 
+## Game Play
+From the splash screen use cursor up/down keys to select the world.  Use `ENTER` to begin play.
+
+Use cursor arrow keys to move the runner, `CTRL` to dig left and `ALT` to dig right.  Use `ENTER` to kill the runner if trapped.
+
 ## Test programs
 * `test_levels.prg` - browse levels in any supported world.  Use the `+` and `-` keys to browse the next and previous levels.  Use `1` - `5` to change worlds (Classic, Championship, Professional, Fanbook, Revenge).  Use `c` to "complete" any given level (changing hidden ladder tiles to regular ladder tiles)
 
@@ -16,3 +21,5 @@ This port is (so far :) ) being written in C using the [CC65](https://cc65.githu
 * `test_sprites.prg` - displays sprite images for the runner and guards (images are reversed as necessary for moving left)
 
 * `test_keys.prg` - displays values from key (joystick) input
+
+* `test_splash.prg` - displays splash screen tilemap

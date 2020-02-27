@@ -38,6 +38,15 @@ int loadFiles()
         printf("  Failed to load sprites\n");
         return 0;
     }
+
+    // Load splash tilemap to bank 21
+    result = load_bank_host("splash.bin",21);
+    if (result) 
+        printf("  Loaded splash tilemap\n");
+    else {
+        printf("  Failed to load splash tilemap\n");
+        return 0;
+    }
     
     // Load classic levels to banks 1-5
     result = load_bank_host("classic.bin",1);
