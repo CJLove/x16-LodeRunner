@@ -11,6 +11,17 @@ From the splash screen use cursor up/down keys to select the world.  Use `ENTER`
 
 Use cursor arrow keys to move the runner, `CTRL` to dig left and `ALT` to dig right.  Use `ENTER` to kill the runner if trapped.
 
+## Building and Running
+Building requires the CC65 toolchain.  After cloning the repo, do the following:
+```bash
+git submodule update --init
+cd libX16/src
+make
+cd ../../src
+make all
+/path/to/x16emu -prg lode_runner.prg
+```
+
 ## Test programs
 * `test_levels.prg` - browse levels in any supported world.  Use the `+` and `-` keys to browse the next and previous levels.  Use `1` - `5` to change worlds (Classic, Championship, Professional, Fanbook, Revenge).  Use `c` to "complete" any given level (changing hidden ladder tiles to regular ladder tiles)
 

@@ -4,7 +4,6 @@
 #include "vload.h"
 #include "load.h"
 
-
 int loadFiles()
 {
     int result = 1;
