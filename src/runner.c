@@ -70,18 +70,21 @@ static uint8_t digRight[2][DIG_LENGTH] = {
 #define STATE_OK_TO_MOVE 1
 #define STATE_FALLING 2
 
+// Define this to enable runner debug information
+//#define DEBUG
+
 // Debug: display runner x & xOffset, y & yOffset
 void displayPos()
 {
-    char buffer[10];
+    char buffer[8];
     uint8_t i = 0;
     sprintf(buffer, "%c:%2u %2d", 24, runner.x, runner.xOffset);
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < 8; i++) {
         setTile(30 + i, 6, buffer[i], 0);
     }
 
     sprintf(buffer, "%c:%2u %2d", 25, runner.y, runner.yOffset);
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < 8; i++) {
         setTile(30 + i, 8, buffer[i], 0);
     }
 }
@@ -295,7 +298,8 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             // Move to y-1 position
             if (curToken == TILE_BRICK || TILE_HIDDEN) {
                 // In hole or hidden ladder
-                // curToken = TILE_BLANK;
+                // Note: This somehow breaks climbing up the last ladder tile
+                //curToken = TILE_BLANK;
                 // Debug: show when we hit this condition
                 //setTile(38,21,48,0); // 0
             }
@@ -345,9 +349,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             // Move to y + 1 position
             if (curToken == TILE_BRICK || curToken == TILE_HIDDEN) {
                 // In hole or hidden ladder
-                //curToken = TILE_BLANK;
-                // Debug: show when we hit this condition
-                //setTile(38,21,49,0); // 1
+                curToken = TILE_BLANK;
             }
             map[x][y].act = curToken;
             y++;
