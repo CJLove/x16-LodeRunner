@@ -766,6 +766,23 @@ void processFillHole()
 
 }
 
+void stopDigging(uint8_t x, uint8_t y)
+{
+    // Disable hole
+    hole.action = ACT_STOP;
+
+    // Fill hole and clear tile above hole
+    y++;
+    map[x][y].act = map[x][y].base; // TILE_BRICK
+    setTile(x,y,TILE_BRICK,0);
+    setTile(x,y-1,TILE_BLANK,0);
+
+    // Change runner action
+    runner.action = ACT_STOP;
+
+    // TODO: stop sound of digging
+}
+
 uint8_t isDigging()
 {
     uint8_t rc = 0;
@@ -777,12 +794,14 @@ uint8_t isDigging()
         uint8_t x = hole.x;
         uint8_t y = hole.y;
         if (map[x][y].act == TILE_GUARD) {
-            // TODO: Check if guard is too close to the digging
-
-            // stopDigging(x,y);
-
-            map[x][y].act = TILE_BLANK; // assume hole complete
-            rc = 1;
+            uint8_t id = guardId(x,y);
+            if (hole.idx < DIG_LENGTH && guard[id].yOffset > -H4) {
+                // Check if guard is too close to the digging
+                stopDigging(x,y);
+            } else {
+                map[x][y].act = TILE_BLANK; // assume hole complete
+                rc = 1;
+            }
         } else {
             // No need to change runner image (run left or run right)
             runner.action = ACT_STOP;
