@@ -1,9 +1,6 @@
 # Known Issues
-- game playability
-  - tuning of guard movement per tick
-- occasionally able to dig the brick below a ladder
+- tuning of guard movement per tick
 - occasionally able to run over a hole that is about to be filled
-- Handle case of guard being too close to runner when digging
 
 # Rough plans
 - Longer term: consider incorporating tilesets and concepts from LodeRunner Mad Monks Revenge

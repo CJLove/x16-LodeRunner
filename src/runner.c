@@ -398,7 +398,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         }
         else if (xOffset < -W2) {
             // Move to x-1 position
-            if (curToken == TILE_BRICK || curToken == TILE_LADDER) {
+            if (curToken == TILE_BRICK) { // || curToken == TILE_LADDER) {
                 // In hole or hidden ladder
                 curToken = TILE_BLANK;
                 // Debug: show when we hit this condition
@@ -442,7 +442,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         }
         else if (xOffset > W2) {
             // Move to x+1 position
-            if (curToken == TILE_BRICK || curToken == TILE_LADDER) {
+            if (curToken == TILE_BRICK) { // || curToken == TILE_LADDER) {
                 // In hole or hidden ladder
                 curToken = TILE_BLANK;
                 // Debug: show when we hit this condition
