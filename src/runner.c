@@ -152,7 +152,7 @@ void displayDig()
         setTile(28+i,10,buffer[i],0);
     }
 }
-
+// Debug: display gold count
 void displayGold()
 {
     setTile(38,20,goldCount+48,0);
@@ -300,8 +300,6 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
                 // In hole or hidden ladder
                 // Note: This somehow breaks climbing up the last ladder tile
                 //curToken = TILE_BLANK;
-                // Debug: show when we hit this condition
-                //setTile(38,21,48,0); // 0
             }
             // Runner moves to [x][y-1] so set [x][y].act to previous state
             map[x][y].act = curToken;
@@ -402,7 +400,6 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
                 // In hole or hidden ladder
                 curToken = TILE_BLANK;
                 // Debug: show when we hit this condition
-                //setTile(38,21,50,0); // 2
             }
             // Runner moves to map[x-1][y] so set map[x][y].act to previous state
             map[x][y].act = curToken;
@@ -445,8 +442,6 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
             if (curToken == TILE_BRICK) { // || curToken == TILE_LADDER) {
                 // In hole or hidden ladder
                 curToken = TILE_BLANK;
-                // Debug: show when we hit this condition
-                //setTile(38,21,51,0); // 3
             }
             // runner moves to map[x+1][y], so set map[x][y].act to previous state
             map[x][y].act = curToken; // runner move to [x+1][y], so set [x][y].act to previous state
@@ -825,7 +820,8 @@ void processDigHole()
             setTile(hole.x,hole.y,digRight[DIG_UPPER][hole.idx],0);
             setTile(hole.x,hole.y+1,digRight[DIG_LOWER][hole.idx],0);
         }
-        setTile(38,27,hole.idx+48,0);
+        // Debug: display hole animation index
+        // setTile(38,27,hole.idx+48,0);
     } else {
         digComplete();
     }
