@@ -68,6 +68,13 @@ static const uint8_t gameOverTiles[3][11] = {
     { 103, 100, 100, 100, 100, 100, 100, 100, 100, 100, 104 }
 };
 
+// Tiles for "WORLD COMPLETE"
+static const uint8_t worldCompleteTiles[3][16] = {
+    { 101, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 102 },
+    { 99, 23, 15, 18, 12, 4, 32, 3, 15, 13, 16, 12, 5, 20, 5, 99 },
+    { 103, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 104 }
+};
+
 void completeLevel()
 {
     uint8_t row = 0;
@@ -323,4 +330,16 @@ void gameOver()
         setTile(9+i,9,gameOverTiles[2][i],0);
     }
     sleep(5);
+}
+
+void worldComplete()
+{
+    uint8_t i = 0;
+    // Disable sprites
+    vpoke(0x00, 0x1f4000);
+    for (i = 0; i < 16; i++) {
+        setTile(6+i,7,worldCompleteTiles[0][i],0);
+        setTile(6+i,8,worldCompleteTiles[1][i],0);
+        setTile(6+i,9,worldCompleteTiles[2][i],0);
+    }
 }

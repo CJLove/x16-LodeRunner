@@ -42,18 +42,21 @@ void mainTick()
             playGame();
             break;
         case GAME_NEW_LEVEL:
-            loadLevel(world,level);
-            displayLevel(level-1);
-            // Enable sprites
-            vpoke(0x01, 0x1f4000);
-            gameState = GAME_RUNNING;
+            if (loadLevel(world,level)) {
+                displayLevel(level-1);
+                // Enable sprites
+                vpoke(0x01, 0x1f4000);
+                gameState = GAME_RUNNING;
+            } else {
+                worldComplete();
+                gameState = GAME_OVER;
+            }
             break;
         case GAME_FINISH:
             // Disable sprites
             vpoke(0x0, 0x1f4000);
             // Increase score for level completion
             scoreCount = 0;
-//            displayScore(SCORE_COMPLETE_LEVEL);
             
             gameState = GAME_FINISH_SCORE_COUNT;
             break;
@@ -86,7 +89,7 @@ void mainTick()
             }
             break;
         case GAME_OVER:
-            // Keep "Game Over" displayed for 5 seconds then go back to splash
+            // Keep "Game Over" or "WORLD COMPLETE" displayed for 5 seconds then go back to splash
             sleep(5);
             gameState = GAME_SPLASH;
             break;
