@@ -1,5 +1,4 @@
 # Known Issues
-- tuning of guard movement per tick
 - occasionally able to run over a hole that is about to be filled
 
 # Rough plans

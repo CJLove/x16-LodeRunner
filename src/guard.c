@@ -46,30 +46,31 @@ static uint8_t guardSeqSizes[MAX_SEQUENCE] = {RUN_LENGTH, CLIMB_LENGTH, RAPPEL_L
 #define NUM_MOVE_ITEMS 6
 
 // Original movePolicy array from Lode Runner Total Recall
-// static uint8_t movePolicy[12][NUM_MOVE_ITEMS] = {
-//     {0, 0, 0, 0, 0, 0}, 
-//     {0, 1, 1, 0, 1, 1}, 
-//     {1, 1, 1, 1, 1, 1}, 
-//     {1, 2, 1, 1, 2, 1}, 
-//     {1, 2, 2, 1, 2, 2}, 
-//     {2, 2, 2, 2, 2, 2},
-//     {2, 2, 3, 2, 2, 3}, 
-//     {2, 3, 3, 2, 3, 3}, 
-//     {3, 3, 3, 3, 3, 3}, 
-//     {3, 3, 4, 3, 3, 4}, 
-//     {3, 4, 4, 3, 4, 4}, 
-//     {4, 4, 4, 4, 4, 4}
-// };
-
-static uint8_t movePolicy[7][NUM_MOVE_ITEMS] = {
-    {0, 0, 0, 0, 0, 0},     // 0 guards
-    {0, 1, 0, 1, 0, 0},     // 1 guard
-    {1, 1, 0, 1, 1, 0},     // 2 guards
-    {1, 1, 1, 1, 1, 0},     // 3 guards
-    {1, 2, 2, 1, 2, 2},     // 4 guards
-    {2, 2, 2, 2, 2, 2},     // 5 guards
-    {2, 2, 3, 2, 2, 3}      // 6 guards
+static uint8_t movePolicy[12][NUM_MOVE_ITEMS] = {
+    {0, 0, 0, 0, 0, 0}, 
+    {0, 1, 1, 0, 1, 1}, 
+    {1, 1, 1, 1, 1, 1}, 
+    {1, 2, 1, 1, 2, 1}, 
+    {1, 2, 2, 1, 2, 2}, 
+    {2, 2, 2, 2, 2, 2},
+    {2, 2, 3, 2, 2, 3}, 
+    {2, 3, 3, 2, 3, 3}, 
+    {3, 3, 3, 3, 3, 3}, 
+    {3, 3, 4, 3, 3, 4}, 
+    {3, 4, 4, 3, 4, 4}, 
+    {4, 4, 4, 4, 4, 4}
 };
+
+// Revised movePolicy array when guard movement was overly aggressive
+// static uint8_t movePolicy[7][NUM_MOVE_ITEMS] = {
+//     {0, 0, 0, 0, 0, 0},     // 0 guards
+//     {0, 1, 0, 1, 0, 0},     // 1 guard
+//     {1, 1, 0, 1, 1, 0},     // 2 guards
+//     {1, 1, 1, 1, 1, 0},     // 3 guards
+//     {1, 2, 2, 1, 2, 2},     // 4 guards
+//     {2, 2, 2, 2, 2, 2},     // 5 guards
+//     {2, 2, 3, 2, 2, 3}      // 6 guards
+// };
 
 // Offset into 
 uint8_t moveOffset = 0;
