@@ -7,6 +7,9 @@
 # Binary files
 *.BIN
 
+# Artifacts
+*.zip
+
 # Prerequisites
 *.d
 

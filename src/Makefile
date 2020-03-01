@@ -44,22 +44,22 @@ SPLASH.BIN: ../assets/splash.txt
 TILES.BIN: ../assets/tiles.txt
 	../scripts/graphic.py --input ../assets/tiles.txt --output TILES.BIN --x 8 --y 8 --bpp 2 --addr 0000
 
-CLASSIC.BIN: ../assets/classic.json
+CLASSIC.BIN: ../assets/classic.json ../scripts/levels.py
 	../scripts/levels.py --input ../assets/classic.json --output CLASSIC.BIN
 
-CHAMP.BIN: ../assets/championship.json
+CHAMP.BIN: ../assets/championship.json ../scripts/levels.py
 	../scripts/levels.py --input ../assets/championship.json --output CHAMP.BIN
 
-PRO.BIN: ../assets/professional.json
+PRO.BIN: ../assets/professional.json ../scripts/levels.py
 	../scripts/levels.py --input ../assets/professional.json --output PRO.BIN
 
-FANBOOK.BIN: ../assets/fanbook.json
+FANBOOK.BIN: ../assets/fanbook.json ../scripts/levels.py
 	../scripts/levels.py --input ../assets/fanbook.json --output FANBOOK.BIN
 
-REVENGE.BIN: ../assets/revenge.json
+REVENGE.BIN: ../assets/revenge.json ../scripts/levels.py
 	../scripts/levels.py --input ../assets/revenge.json --output REVENGE.BIN
 
-CUSTOM.BIN: ../assets/custom.json
+CUSTOM.BIN: ../assets/custom.json ../scripts/levels.py
 	../scripts/levels.py --input ../assets/custom.json --output CUSTOM.BIN
 
 
@@ -72,3 +72,7 @@ clean:
 all: bins lode_runner
 
 bins: CLASSIC.BIN CHAMP.BIN PRO.BIN FANBOOK.BIN REVENGE.BIN SPRITES.BIN TILES.BIN PALETTE.BIN CUSTOM.BIN SPLASH.BIN
+
+artifacts: all
+	rm -f ../lode_runner.zip
+	zip ../lode_runner.zip lode_runner.prg *.BIN

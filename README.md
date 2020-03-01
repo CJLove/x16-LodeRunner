@@ -12,7 +12,7 @@ From the splash screen use cursor up/down keys to select the world.  Use `ENTER`
 Use cursor arrow keys to move the runner, `CTRL` to dig left and `ALT` to dig right.  Use `ENTER` to kill the runner if trapped.
 
 ## Building and Running
-Building requires the CC65 toolchain.  After cloning the repo, do the following:
+Building requires the CC65 toolchain. Python3 scripts are used to build binary files from various assets. After cloning the repo, do the following:
 ```bash
 git submodule update --init
 cd libX16/src
