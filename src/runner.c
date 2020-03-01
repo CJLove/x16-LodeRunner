@@ -71,7 +71,9 @@ static uint8_t digRight[2][DIG_LENGTH] = {
 #define STATE_FALLING 2
 
 // Define this to enable runner debug information
-//#define DEBUG
+// #define DEBUG
+// Define this to debug hole fill (NOTE: slows down the game)
+//#define DEBUG_FILL
 
 // Debug: display runner x & xOffset, y & yOffset
 void displayPos()
@@ -143,19 +145,49 @@ void displayDig()
     char buffer[15];
     uint8_t i = 0;
     if (hole.action) {
-        sprintf(buffer,"%c:%1d %2d %2d %2d",1,hole.action, hole.idx, hole.x, hole.y);
         // Format: "A:x xx xx xx"
-    } else {
-        memset(buffer,32,sizeof(buffer));
-    }
-    for (i = 0; i < 12; i++) {
-        setTile(28+i,10,buffer[i],0);
+        sprintf(buffer,"%c:%1d %2d %2d %2d",1,hole.action, hole.idx, hole.x, hole.y);
+    
+        for (i = 0; i < 12; i++) {
+            setTile(28+i,10,buffer[i],0);
+        }
     }
 }
+
+// Debug: display state regarding hole filling (expensive!)
+void displayFill()
+{
+    char buffer[15];
+    uint8_t i = 0;
+    uint8_t j = 0;
+    uint8_t r = 11;
+    for (i = 0; i < MAX_HOLES; i++) {
+        if (holes[i].active) {
+            // Format: X:x Y:y ccc 
+            sprintf(buffer,"%c:%d%c:%d %03d",24,holes[i].x,25,holes[i].y,holes[i].count);
+            for (j = 0; j < 12; j++) {
+                setTile(28+j,r,buffer[j],0);
+            }
+            r++;
+        }
+    }
+    for (; r < 30; r++) {
+        for (j = 0; j < 12; j++) {
+            setTile(28+j,r,0,0);
+        }
+    }
+
+}
+
 // Debug: display gold count
 void displayGold()
 {
-    setTile(38,20,goldCount+48,0);
+    uint8_t i;
+    char buffer[5];
+    sprintf(buffer,"%02d %d",goldCount, goldComplete);
+    for (i = 0; i < 4; i++) {
+        setTile(36+i,20,buffer[i],0);
+    }
 }
 
 void decGold()
@@ -167,19 +199,27 @@ void decGold()
             // TODO: Sound for finishing all gold
         }
     }
-
+#ifdef DEBUG        
+    displayGold();
+#endif
 }
 
 void removeGold(uint8_t x, uint8_t y)
 {
     map[x][y].base = TILE_BLANK;
     setTile(x,y,TILE_BLANK,0);
+#ifdef DEBUG        
+    displayGold();
+#endif
 }
 
 void addGold(uint8_t x, uint8_t y)
 {
     map[x][y].base = TILE_GOLD;
     setTile(x,y,TILE_GOLD,0);
+#ifdef DEBUG        
+    displayGold();
+#endif
 }
 
 void setRunnerDead()
@@ -517,9 +557,6 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         removeGold(x,y);
         decGold();
         displayScore(SCORE_GET_GOLD);
-#ifdef DEBUG        
-        displayGold();
-#endif
     }
 }
 
@@ -716,10 +753,8 @@ void fillComplete(uint8_t holeIdx)
                 int8_t id = guardId(x,y);
                 removeFromShake(id);
                 if (id != -1) {
-                    // Debug: show the id of the dead guard
-                    //setTile(1,21,id+48,0);
                     if (guard[id].hasGold > 0) {
-                        // decGold();
+                        decGold();
                         guard[id].hasGold = 0;
                     }
                 }
@@ -738,6 +773,9 @@ void fillComplete(uint8_t holeIdx)
 void processFillHole()
 {
     uint8_t i = 0;
+#ifdef DEBUG_FILL
+    displayFill();
+#endif
     for (i = 0; i < MAX_HOLES; i++) {
         if (holes[i].active) {
             uint8_t x = holes[i].x;
@@ -752,7 +790,7 @@ void processFillHole()
                 setTile(x,y,TILE_REGEN2,0);
             } else if (holes[i].count == HOLE_REGEN3) {
                 setTile(x,y,TILE_REGEN3,0);
-            } else if (holes[i].count == HOLE_REGEN4) {
+            } else if (holes[i].count >= HOLE_REGEN4) {
                 setTile(x,y,TILE_BRICK,0);
                 fillComplete(i);
             }
@@ -820,8 +858,6 @@ void processDigHole()
             setTile(hole.x,hole.y,digRight[DIG_UPPER][hole.idx],0);
             setTile(hole.x,hole.y+1,digRight[DIG_LOWER][hole.idx],0);
         }
-        // Debug: display hole animation index
-        // setTile(38,27,hole.idx+48,0);
     } else {
         digComplete();
     }

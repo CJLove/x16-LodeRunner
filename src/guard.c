@@ -636,6 +636,12 @@ void guardMoveStep(uint8_t id, uint8_t action)
         if (stayCurrentPos && yOffset < 0)
             yOffset = 0;
         else if (yOffset < -H2) {
+            if (curToken == TILE_BRICK || curToken == TILE_HIDDEN) {
+                // In hole or on hidden ladder, so this check makes
+                // sure that the runner won't be able to run over a
+                // hole that a guard has climbed out of
+                curToken = TILE_BLANK;
+            }
             // Move to y-1 position
             map[x][y].act = curToken;
             y--;
