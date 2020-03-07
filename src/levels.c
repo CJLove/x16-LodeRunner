@@ -31,30 +31,18 @@ struct hole_t holes[MAX_HOLES];
 // State information for hole being dug by the runner
 struct dig_t hole;
 
-// Count of gold pieces on the current level
-uint8_t goldCount;
+// State information for current level
+struct level_t currentLevel;
 
-// Indicator that gold collection is complete for the current level
-uint8_t goldComplete;
-
-// Current game score
-uint32_t currentScore;
-
-// Number of lives
-uint8_t lives;
-
-// State of the game
-uint8_t gameState;
-
-// Current level
-uint8_t level = 1;
-
-// Current world
-uint8_t world = WORLD_CLASSIC;
-
-// God mode
-uint8_t godMode = MORTAL;
-
+// State information for current game
+struct game_t currentGame = {
+    0,              // Level
+    GAME_NEW_LEVEL, // Game state
+    5,              // Lives
+    WORLD_CLASSIC,  // World
+    1,              // Level
+    MORTAL          // God mode
+};
 
 // Tiles for text on the status line 
 static const uint8_t labelScore[] = {19, 3, 15, 18, 5};
@@ -89,16 +77,16 @@ void completeLevel()
             }
         }
     }
-    goldComplete = 1;
+    currentLevel.goldComplete = 1;
 }
 
 void displayScore(uint32_t addScore)
 {
     uint8_t col = 0;
     char buffer[10];
-    currentScore += addScore;
+    currentGame.currentScore += addScore;
 
-    snprintf(buffer, 10, "%07lu", currentScore);
+    snprintf(buffer, 10, "%07lu", currentGame.currentScore);
     for (col = 0; col < 7; col++) {
         setTile(col + 5, LEVEL_ROW_COUNT + 1, buffer[col], 0);
     }
@@ -108,7 +96,7 @@ void displayLives()
 {
     uint8_t col = 0;
     char buffer[10];
-    snprintf(buffer, 10, "%03d", (int)lives);
+    snprintf(buffer, 10, "%03d", (int)currentGame.lives);
     for (col = 0; col < 3; col++) {
         setTile(col + 16, LEVEL_ROW_COUNT + 1, buffer[col], 0);
     }
@@ -158,8 +146,8 @@ int loadLevel(uint8_t world, uint8_t level)
     // digging in progress or holes
     clearRunner();
     clearGuards();
-    goldCount = 0;
-    goldComplete = 0;
+    currentLevel.goldCount = 0;
+    currentLevel.goldComplete = 0;
     for (i = 0; i < MAX_HOLES; i++) {
         holes[i].active = 0;
     }
@@ -203,7 +191,7 @@ int loadLevel(uint8_t world, uint8_t level)
                         map[idx * 2][row].act = TILE_BLANK;
                         break;
                     case TILE_GOLD:
-                        goldCount++;
+                        currentLevel.goldCount++;
                         // Fall through
                     default:
                         map[idx * 2][row].base = tile1;
@@ -236,7 +224,7 @@ int loadLevel(uint8_t world, uint8_t level)
                         map[idx * 2 + 1][row].act = TILE_BLANK;
                         break;
                     case TILE_GOLD:
-                        goldCount++;
+                        currentLevel.goldCount++;
                         // Fall through
                     default:
                         map[idx * 2 + 1][row].base = tile2;
@@ -245,7 +233,7 @@ int loadLevel(uint8_t world, uint8_t level)
                 }
             }
         }
-
+        printf("loaded level %d in world %d\n",currentGame.level,currentGame.world);
         return 1;
     }
 

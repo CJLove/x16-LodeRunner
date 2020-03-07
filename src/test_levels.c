@@ -11,14 +11,14 @@ int main()
     int result = 0;
     uint8_t world = WORLD_CLASSIC;
     uint8_t level = 1;
-    printf("Loading resources...\n");
+    printf("loading resources...\n");
     
     result = loadFiles();
 
     if (result) {
-        printf("Loaded resources successfully\n");
+        printf("loaded resources successfully\n");
     } else {
-        printf("Failed to load all resources\n");
+        printf("failed to load all resources\n");
         return result;
     }
 

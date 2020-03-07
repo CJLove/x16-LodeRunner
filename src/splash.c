@@ -79,9 +79,9 @@ void splash()
     clearKeyboardBuffer();
 
     // Default to WORLD_CLASSIC
-    world = WORLD_CLASSIC;
+    currentGame.world = WORLD_CLASSIC;
     // Default to 5 lives
-    lives = 5;
+    currentGame.lives = 5;
     setTile(3,17,28,0);
 
     while (1) {
@@ -98,7 +98,7 @@ void splash()
                     else
                         worldIdx--;
                     setTile(3,splashWorlds[worldIdx].y,28,0);
-                    world = splashWorlds[worldIdx].world;
+                    currentGame.world = splashWorlds[worldIdx].world;
                     break;
                 case CHAR_DOWN:
                     setTile(3,splashWorlds[worldIdx].y,0,0);
@@ -107,10 +107,10 @@ void splash()
                     else
                         worldIdx++;
                     setTile(3,splashWorlds[worldIdx].y,28,0);
-                    world = splashWorlds[worldIdx].world;
+                    currentGame.world = splashWorlds[worldIdx].world;
                     break;
                 case CHAR_ENTER:
-                    gameState = GAME_NEW_LEVEL;
+                    currentGame.gameState = GAME_NEW_LEVEL;
                     setTile(3,splashWorlds[worldIdx].y,0,0);
                     clearSplash();
                     return;

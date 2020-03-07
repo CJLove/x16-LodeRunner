@@ -13,8 +13,8 @@
 
 // Main loop while playing the game
 void playGame() {
-    if (goldComplete && runner.y == 0 && runner.yOffset == 0) {
-        gameState = GAME_FINISH;
+    if (currentLevel.goldComplete && runner.y == 0 && runner.yOffset == 0) {
+        currentGame.gameState = GAME_FINISH;
         return;
     }
 
@@ -23,7 +23,7 @@ void playGame() {
     } else {
         processDigHole();
     }
-    if (gameState != GAME_RUNNER_DEAD) moveGuard();
+    if (currentGame.gameState != GAME_RUNNER_DEAD) moveGuard();
 
     playSoundFx();
     processGuardShake();
@@ -36,7 +36,7 @@ static uint8_t scoreCount;
 
 void mainTick()
 {
-    switch(gameState) {
+    switch(currentGame.gameState) {
         case GAME_SPLASH:
             splash();
             break;
@@ -44,15 +44,15 @@ void mainTick()
             playGame();
             break;
         case GAME_NEW_LEVEL:
-            if (loadLevel(world,level)) {
-                displayLevel(level-1);
+            if (loadLevel(currentGame.world,currentGame.level)) {
+                displayLevel(currentGame.level-1);
                 // Enable sprites
                 vpoke(0x01, 0x1f4000);
-                gameState = GAME_RUNNING;
+                currentGame.gameState = GAME_RUNNING;
             } else {
                 worldComplete();
-                level = 1;
-                gameState = GAME_OVER;
+                currentGame.level = 1;
+                currentGame.gameState = GAME_OVER;
             }
             break;
         case GAME_FINISH:
@@ -62,7 +62,7 @@ void mainTick()
             scoreCount = 0;
             // Start the sound effect for updating the score
             playScoringFx();
-            gameState = GAME_FINISH_SCORE_COUNT;
+            currentGame.gameState = GAME_FINISH_SCORE_COUNT;
             break;
         case GAME_FINISH_SCORE_COUNT:
             while (scoreCount <= SCORE_COUNT) {
@@ -75,32 +75,32 @@ void mainTick()
             }
 
             stopScoringFx();
-            lives++;
-            gameState = GAME_NEXT_LEVEL;
+            currentGame.lives++;
+            currentGame.gameState = GAME_NEXT_LEVEL;
             break;
         case GAME_NEXT_LEVEL:
-            level++;
-            gameState = GAME_NEW_LEVEL;
+            currentGame.level++;
+            currentGame.gameState = GAME_NEW_LEVEL;
             break;
         case GAME_PREV_LEVEL:
-            if (level) level--;
-            gameState = GAME_NEW_LEVEL;
+            if (currentGame.level) currentGame.level--;
+            currentGame.gameState = GAME_NEW_LEVEL;
             break;
         case GAME_RUNNER_DEAD:
-            lives--;
+            currentGame.lives--;
             displayLives();
-            if (lives <= 0) {
+            if (currentGame.lives <= 0) {
                 // TODO: Game Over
                 gameOver();
-                gameState = GAME_OVER;
+                currentGame.gameState = GAME_OVER;
             } else {
-                gameState = GAME_NEW_LEVEL;
+                currentGame.gameState = GAME_NEW_LEVEL;
             }
             break;
         case GAME_OVER:
             // Keep "Game Over" or "WORLD COMPLETE" displayed for 5 seconds then go back to splash
             sleep(5);
-            gameState = GAME_SPLASH;
+            currentGame.gameState = GAME_SPLASH;
             break;
         default:
             break;
@@ -120,27 +120,27 @@ int main()
     // Not supported for CX16
     // kbrepeat(KBREPEAT_ALL);
 
-    world = WORLD_CLASSIC;
+    currentGame.world = WORLD_CLASSIC;
     // Test world for benchmarks and isolated testing
     //world = WORLD_CUSTOM;
-    level = 1;
-    gameState = GAME_SPLASH;
-    lives = 5;
+    currentGame.level = 1;
+    currentGame.gameState = GAME_SPLASH;
+    currentGame.lives = 5;
 
  
 
-    printf("Loading resources...\n");
+    printf("loading resources...\n");
     
     result = loadFiles();
 
     if (result) {
-        printf("Loaded resources successfully\n");
+        printf("loaded resources successfully\n");
     } else {
-        printf("Failed to load all resources\n");
+        printf("failed to load all resources\n");
         return result;
     }
 
-    currentScore = 0;
+    currentGame.currentScore = 0;
 
     screenConfig();
 

@@ -13,14 +13,14 @@ int main()
     uint8_t *tilemap = (uint8_t*)0xa000;
     uint8_t x = 0;
     uint8_t y = 0;
-    printf("Loading resources...\n");
+    printf("loading resources...\n");
     
     result = loadFiles();
 
     if (result) {
-        printf("Loaded resources successfully\n");
+        printf("loaded resources successfully\n");
     } else {
-        printf("Failed to load all resources\n");
+        printf("failed to load all resources\n");
         return result;
     }
 

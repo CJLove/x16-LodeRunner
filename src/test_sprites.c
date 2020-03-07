@@ -13,14 +13,14 @@ int main()
     uint16_t x = 16;
     uint16_t y = 16;
     uint32_t sprite = 0x1f5000;
-    printf("Loading resources...\n");
+    printf("loading resources...\n");
     
     result = loadFiles();
 
     if (result) {
-        printf("Loaded resources successfully\n");
+        printf("loaded resources successfully\n");
     } else {
-        printf("Failed to load all resources\n");
+        printf("failed to load all resources\n");
         return result;
     }
 
@@ -100,8 +100,8 @@ int main()
     x += 16;
     sprite += 8;
 
-    vpoke((RUNNER_RAPELL_1 >> 5) & 0xff, sprite);      // Attr0
-    VERA.data0 = (RUNNER_RAPELL_1 >>13) & 0xf;         // Attr1
+    vpoke((RUNNER_RAPPEL_1 >> 5) & 0xff, sprite);      // Attr0
+    VERA.data0 = (RUNNER_RAPPEL_1 >>13) & 0xf;         // Attr1
     VERA.data0 = x & 0xff;                      // Attr2
     VERA.data0 = x >> 8;                        // Attr3
     VERA.data0 = y & 0xff;                      // Attr4
@@ -112,8 +112,8 @@ int main()
     x += 16;
     sprite += 8;
 
-    vpoke((RUNNER_RAPELL_2 >> 5) & 0xff, sprite);      // Attr0
-    VERA.data0 = (RUNNER_RAPELL_2 >>13) & 0xf;         // Attr1
+    vpoke((RUNNER_RAPPEL_2 >> 5) & 0xff, sprite);      // Attr0
+    VERA.data0 = (RUNNER_RAPPEL_2 >>13) & 0xf;         // Attr1
     VERA.data0 = x & 0xff;                      // Attr2
     VERA.data0 = x >> 8;                        // Attr3
     VERA.data0 = y & 0xff;                      // Attr4
@@ -124,8 +124,8 @@ int main()
     x += 16;
     sprite += 8;
 
-    vpoke((RUNNER_RAPELL_3 >> 5) & 0xff, sprite);      // Attr0
-    VERA.data0 = (RUNNER_RAPELL_3 >>13) & 0xf;         // Attr1
+    vpoke((RUNNER_RAPPEL_3 >> 5) & 0xff, sprite);      // Attr0
+    VERA.data0 = (RUNNER_RAPPEL_3 >>13) & 0xf;         // Attr1
     VERA.data0 = x & 0xff;                      // Attr2
     VERA.data0 = x >> 8;                        // Attr3
     VERA.data0 = y & 0xff;                      // Attr4

@@ -12,14 +12,14 @@ int main()
 {
     int result = 0;
     uint8_t tile = 0;
-    printf("Loading resources...\n");
+    printf("loading resources...\n");
     
     result = loadFiles();
 
     if (result) {
-        printf("Loaded resources successfully\n");
+        printf("loaded resources successfully\n");
     } else {
-        printf("Failed to load all resources\n");
+        printf("failed to load all resources\n");
         return result;
     }
 
@@ -30,32 +30,30 @@ int main()
 
         switch (act) {
         case ACT_UNKNOWN: 
-            // Don't print anything
-            //printf("UNKNOWN\n");
             break;
         case ACT_STOP:
-            printf("STOP\n");
+            printf("stop\n");
             break;
         case ACT_LEFT:
-            printf("LEFT\n");
+            printf("left\n");
             break;
         case ACT_RIGHT:
-            printf("RIGHT\n");
+            printf("right\n");
             break;
         case ACT_UP:
-            printf("UP\n");
+            printf("up\n");
             break;
         case ACT_DOWN:
-            printf("DOWN\n");
+            printf("down\n");
             break;
         case ACT_DIG_LEFT:
-            printf("DIG LEFT\n");
+            printf("dig left\n");
             break;
         case ACT_DIG_RIGHT:
-            printf("DIG RIGHT\n");
+            printf("dig right\n");
             break;
         default:
-            printf("OTHER: %d\n",act);
+            printf("other: %d\n",act);
             break;
         }
 

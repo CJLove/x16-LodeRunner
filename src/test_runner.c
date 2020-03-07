@@ -13,18 +13,18 @@
 int main()
 {
     int result = 0;
-    world = WORLD_CLASSIC;
-    level = 1;
-    lives = 5;
+    currentGame.world = WORLD_CLASSIC;
+    currentGame.level = 1;
+    currentGame.lives = 5;
  
-    printf("Loading resources...\n");
+    printf("loading resources...\n");
     
     result = loadFiles();
 
     if (result) {
-        printf("Loaded resources successfully\n");
+        printf("loaded resources successfully\n");
     } else {
-        printf("Failed to load all resources\n");
+        printf("failed to load all resources\n");
         return result;
     }
 
@@ -33,8 +33,8 @@ int main()
 
     screenConfig();
 
-    loadLevel(world,level);
-    displayLevel(level-1);
+    loadLevel(currentGame.world,currentGame.level);
+    displayLevel(currentGame.level-1);
 
     do {
         waitvsync();

@@ -54,6 +54,30 @@ struct hole_t {
 };
 #define MAX_HOLES 30
 
+// Struct defining state for the current level
+struct level_t {
+    // Count of gold pieces remaining
+    uint8_t goldCount;
+    // Flag that gold collection is complete
+    uint8_t goldComplete;
+};
+
+// Struct defining state for the current game
+struct game_t {
+    // Score
+    uint32_t currentScore;
+    // Game state
+    uint8_t gameState;
+    // Lives
+    uint8_t lives;
+    // World
+    uint8_t world;
+    // Level
+    uint8_t level;
+    // God mode indicator
+    uint8_t godMode;
+};
+
 // In-memory map for game play on current level
 extern struct map_t map[NO_OF_TILES_X][NO_OF_TILES_Y];
 
@@ -61,21 +85,10 @@ extern struct dig_t hole;
 
 extern struct hole_t holes[MAX_HOLES];
 
-extern uint8_t goldCount;
+// State information for the current level
+extern struct level_t currentLevel;
 
-extern uint8_t goldComplete;
-
-extern uint32_t currentScore;
-
-extern uint8_t lives;
-
-extern uint8_t gameState;
-
-extern uint8_t world;
-
-extern uint8_t level;
-
-extern uint8_t godMode;
+extern struct game_t currentGame;
 
 extern void gameOver(void);
 

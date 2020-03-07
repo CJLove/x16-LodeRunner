@@ -185,7 +185,7 @@ void displayGold()
 {
     uint8_t i;
     char buffer[5];
-    sprintf(buffer,"%02d %d",goldCount, goldComplete);
+    sprintf(buffer,"%02d %d",currentLevel.goldCount, currentLevel.goldComplete);
     for (i = 0; i < 4; i++) {
         setTile(36+i,20,buffer[i],0);
     }
@@ -193,8 +193,8 @@ void displayGold()
 
 void decGold()
 {
-    goldCount--;
-    if (goldCount <= 0) {
+    currentLevel.goldCount--;
+    if (currentLevel.goldCount <= 0) {
         completeLevel();
         if (runner.y > 0) {
             // TODO: Sound for finishing all gold
@@ -225,10 +225,10 @@ void addGold(uint8_t x, uint8_t y)
 
 void setRunnerDead()
 {
-    if (godMode != GOD_MODE) {
+    if (currentGame.godMode != GOD_MODE) {
         stopAllSoundFx();
         playDeadFx();
-        gameState = GAME_RUNNER_DEAD;
+        currentGame.gameState = GAME_RUNNER_DEAD;
     }
 }
 
@@ -759,7 +759,7 @@ void fillComplete(uint8_t holeIdx)
     switch (map[x][y].act) {
         case TILE_RUNNER:
             // Runner dead
-            gameState = GAME_RUNNER_DEAD;
+            setRunnerDead();
             break;
         case TILE_GUARD:
             {

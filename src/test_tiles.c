@@ -26,14 +26,14 @@ int main()
     uint8_t idx = 0;
     uint8_t tile = 0;
     uint8_t i = 0;
-    printf("Loading resources...\n");
+    printf("loading resources...\n");
     
     result = loadFiles();
 
     if (result) {
-        printf("Loaded resources successfully\n");
+        printf("loaded resources successfully\n");
     } else {
-        printf("Failed to load all resources\n");
+        printf("failed to load all resources\n");
         return result;
     }
 

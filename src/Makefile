@@ -13,7 +13,7 @@ OBJ = $(SRC:%.c=%.o)
 #	cl65 -t cx16 -I $(INCLUDE) -Oi $<
 
 lode_runner: mainloop.c $(SRC)
-	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o lode_runner.prg mainloop.c $(SRC) libX16.lib cx16.lib
+	cl65 -t cx16 --listing test.txt -I $(INCLUDE) -L $(LIBRARIES) -Oi -o lode_runner.prg mainloop.c $(SRC) libX16.lib cx16.lib
 
 test_keys: test_keys.c $(SRC)
 	cl65 -t cx16 -I $(INCLUDE) -L $(LIBRARIES) -Oi -o test_keys.prg test_keys.c $(SRC) libX16.lib cx16.lib
