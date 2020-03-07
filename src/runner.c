@@ -4,6 +4,7 @@
 #include "key.h"
 #include "levels.h"
 #include "loderunner.h"
+#include "sound.h"
 #include <cx16.h>
 #include <stdio.h>
 #include <string.h>
@@ -225,8 +226,9 @@ void addGold(uint8_t x, uint8_t y)
 void setRunnerDead()
 {
     if (godMode != GOD_MODE) {
+        stopAllSoundFx();
+        playDeadFx();
         gameState = GAME_RUNNER_DEAD;
-        sleep(2);
     }
 }
 
@@ -512,10 +514,11 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
     }
 
     if (action == ACT_STOP) {
-        // TODO: stop falling sound
-        // if (runner.action == ACT_FALL) {
-        //    
-        //}
+        // stop falling sound
+        if (runner.action == ACT_FALL) {
+            stopFallingFx();    
+        }
+    
         if (runner.action != ACT_STOP) {
             runner.action = ACT_STOP;
         }
@@ -543,6 +546,15 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         runner.y = y;
         runner.xOffset = xOffset;
         runner.yOffset = yOffset;
+
+        if (action != runner.action) {
+            if (runner.action == ACT_FALL) {
+                stopFallingFx();
+            } else if (action == ACT_FALL) {
+                playFallingFx();
+            }
+        }
+        runner.action = action;
 #ifdef DEBUG
         displayPos();
 #endif
@@ -556,6 +568,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
          (y < MAX_TILE_Y && map[x][y+1].base == TILE_LADDER && yOffset < H4))) {
         removeGold(x,y);
         decGold();
+        playGoldFx();
         displayScore(SCORE_GET_GOLD);
     }
 }
@@ -575,6 +588,7 @@ void digHole(uint8_t action)
     hole.x = x;
     hole.y = y;
     hole.idx = 0;
+    playDiggingFx();
 }
 
 void fillHole(uint8_t x, uint8_t y)
@@ -813,7 +827,8 @@ void stopDigging(uint8_t x, uint8_t y)
     // Change runner action
     runner.action = ACT_STOP;
 
-    // TODO: stop sound of digging
+    // stop sound of digging
+    stopDiggingFx();
 }
 
 uint8_t isDigging()

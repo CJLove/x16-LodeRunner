@@ -9,6 +9,7 @@
 #include "runner.h"
 #include "guard.h"
 #include "levels.h"
+#include "sound.h"
 
 // Main loop while playing the game
 void playGame() {
@@ -24,6 +25,7 @@ void playGame() {
     }
     if (gameState != GAME_RUNNER_DEAD) moveGuard();
 
+    playSoundFx();
     processGuardShake();
     processFillHole();
     // TODO: processReborn();
@@ -49,6 +51,7 @@ void mainTick()
                 gameState = GAME_RUNNING;
             } else {
                 worldComplete();
+                level = 1;
                 gameState = GAME_OVER;
             }
             break;
@@ -57,17 +60,23 @@ void mainTick()
             vpoke(0x0, 0x1f4000);
             // Increase score for level completion
             scoreCount = 0;
-            
+            // Start the sound effect for updating the score
+            playScoringFx();
             gameState = GAME_FINISH_SCORE_COUNT;
             break;
         case GAME_FINISH_SCORE_COUNT:
-            ++scoreCount;
-            displayScore(SCORE_INCREMENT);
-            if (scoreCount == SCORE_COUNT) {
-                lives++;
-                sleep(1);
-                gameState = GAME_NEXT_LEVEL;
+            while (scoreCount <= SCORE_COUNT) {
+                ++scoreCount;
+                displayScore(SCORE_INCREMENT);
+
+                playSoundFx();
+
+                waitvsync();
             }
+
+            stopScoringFx();
+            lives++;
+            gameState = GAME_NEXT_LEVEL;
             break;
         case GAME_NEXT_LEVEL:
             level++;

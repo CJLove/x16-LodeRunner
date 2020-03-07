@@ -104,7 +104,7 @@
 #define SCORE_IN_HOLE       75
 #define SCORE_GUARD_DEAD    75
 #define SCORE_COMPLETE_LEVEL    1500
-#define SCORE_COUNT 15
+#define SCORE_COUNT 50
 #define SCORE_INCREMENT (SCORE_COMPLETE_LEVEL / SCORE_COUNT)
 
 // Hole regeneration timixng
