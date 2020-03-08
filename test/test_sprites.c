@@ -210,8 +210,8 @@ int main()
     x += 16;
     sprite += 8;
 
-    vpoke((GUARD_RAPELL_1 >> 5) & 0xff, sprite);      // Attr0
-    VERA.data0 = (GUARD_RAPELL_1 >>13) & 0xf;         // Attr1
+    vpoke((GUARD_RAPPEL_1 >> 5) & 0xff, sprite);      // Attr0
+    VERA.data0 = (GUARD_RAPPEL_1 >>13) & 0xf;         // Attr1
     VERA.data0 = x & 0xff;                      // Attr2
     VERA.data0 = x >> 8;                        // Attr3
     VERA.data0 = y & 0xff;                      // Attr4
@@ -222,8 +222,8 @@ int main()
     x += 16;
     sprite += 8;
 
-    vpoke((GUARD_RAPELL_2 >> 5) & 0xff, sprite);      // Attr0
-    VERA.data0 = (GUARD_RAPELL_2 >>13) & 0xf;         // Attr1
+    vpoke((GUARD_RAPPEL_2 >> 5) & 0xff, sprite);      // Attr0
+    VERA.data0 = (GUARD_RAPPEL_2 >>13) & 0xf;         // Attr1
     VERA.data0 = x & 0xff;                      // Attr2
     VERA.data0 = x >> 8;                        // Attr3
     VERA.data0 = y & 0xff;                      // Attr4
@@ -234,8 +234,8 @@ int main()
     x += 16;
     sprite += 8;
 
-    vpoke((GUARD_RAPELL_3 >> 5) & 0xff, sprite);      // Attr0
-    VERA.data0 = (GUARD_RAPELL_3 >>13) & 0xf;         // Attr1
+    vpoke((GUARD_RAPPEL_3 >> 5) & 0xff, sprite);      // Attr0
+    VERA.data0 = (GUARD_RAPPEL_3 >>13) & 0xf;         // Attr1
     VERA.data0 = x & 0xff;                      // Attr2
     VERA.data0 = x >> 8;                        // Attr3
     VERA.data0 = y & 0xff;                      // Attr4

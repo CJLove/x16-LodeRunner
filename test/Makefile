@@ -2,18 +2,28 @@
 
 LIBRARIES := -L ../libX16/lib
 
-INCLUDES := -I ../libX16/include
+INCLUDES := -I ../libX16/include -I ../src
 
 SRC = \
-	loader.c screen.c levels.c runner.c key.c guard.c splash.c sound.c
+	../src/loader.c ../src/screen.c ../src/levels.c ../src/runner.c ../src/key.c ../src/guard.c ../src/splash.c ../src/sound.c
 
-OBJ = $(SRC:%.c=%.o)
+test_keys: test_keys.c $(SRC)
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_keys.prg test_keys.c $(SRC) libX16.lib cx16.lib
 
-#.c.o:
-#	cl65 -t cx16 -I $(INCLUDE) -Oi $<
+test_levels: test_levels.c $(SRC)
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_levels.prg test_levels.c $(SRC) libX16.lib cx16.lib
 
-lode_runner: mainloop.c $(SRC)
-	cl65 -t cx16 --listing test.txt $(INCLUDES) $(LIBRARIES) -Oi -o lode_runner.prg mainloop.c $(SRC) libX16.lib cx16.lib
+test_runner: test_runner.c $(SRC)
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_runner.prg test_runner.c $(SRC) libX16.lib cx16.lib
+
+test_tiles: test_tiles.c $(SRC)
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_tiles.prg test_tiles.c $(SRC) libX16.lib cx16.lib
+
+test_splash: test_splash.c $(SRC)
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_splash.prg test_splash.c $(SRC) libX16.lib cx16.lib
+
+test_sprites: test_sprites.c $(SRC)
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_sprites.prg test_sprites.c $(SRC) libX16.lib cx16.lib
 
 PALETTE.BIN: ../assets/palette.txt
 	../scripts/ascii2bin.py --input ../assets/palette.txt --output PALETTE.BIN --addr 1000
@@ -49,10 +59,6 @@ SPRITES.BIN: ../assets/sprites.txt ../scripts/graphic.py
 clean:
 	rm -f *.prg *.o
 
-all: bins lode_runner
+all: bins test_keys test_levels test_runner test_tiles test_splash test_sprites
 
 bins: CLASSIC.BIN CHAMP.BIN PRO.BIN FANBOOK.BIN REVENGE.BIN SPRITES.BIN TILES.BIN PALETTE.BIN CUSTOM.BIN SPLASH.BIN
-
-artifacts: all
-	rm -f ../lode_runner.zip
-	zip ../lode_runner.zip lode_runner.prg *.BIN

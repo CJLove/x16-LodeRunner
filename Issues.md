@@ -3,7 +3,6 @@
 
 # Rough plans
 - Longer term: consider incorporating tilesets and concepts from LodeRunner Mad Monks Revenge
-- Figure out sound
 - Support for jumping to specific level
 - Add game editor?  This would require kernal SAVE support from banked RAM
 
