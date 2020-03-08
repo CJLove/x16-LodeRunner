@@ -10,7 +10,7 @@ struct guard_t guard[MAX_GUARDS];
 
 struct shakeGuard_t shake[MAX_GUARDS];
 
-uint8_t guardCount;
+static uint8_t guardCount;
 
 void addGuardToShakeQueue(uint8_t id);
 
@@ -111,38 +111,43 @@ void clearGuards()
     moveId = 0;
 }
 
-void initGuard(uint8_t x, uint8_t y)
+uint8_t initGuard(uint8_t x, uint8_t y)
 {
-    uint8_t i = guardCount;
-    uint16_t xPos = x * TILE_W;
-    uint16_t yPos = y * TILE_H;
+    if (guardCount < MAX_GUARDS) {
+        uint8_t i = guardCount;
+        uint16_t xPos = x * TILE_W;
+        uint16_t yPos = y * TILE_H;
 
-    guard[i].x = x;
-    guard[i].y = y;
-    guard[i].xOffset = 0;
-    guard[i].yOffset = 0;
-    guard[i].holePosX = 0;
-    guard[i].holePosY = 0;
-    guard[i].action = ACT_UNKNOWN;
-    guard[i].direction = ACT_RIGHT;
-    guard[i].idx = 0;
+        guard[i].x = x;
+        guard[i].y = y;
+        guard[i].xOffset = 0;
+        guard[i].yOffset = 0;
+        guard[i].holePosX = 0;
+        guard[i].holePosY = 0;
+        guard[i].action = ACT_UNKNOWN;
+        guard[i].direction = ACT_RIGHT;
+        guard[i].idx = 0;
 
-    guard[i].sequence = RUN_SEQUENCE;
+        guard[i].sequence = RUN_SEQUENCE;
 
-    // Sprite attribute settings
-    vpoke((GUARD_1 >> 5) & 0xff, 0x1f5000 + 8 * (i + 1));  // Attr0
-    VERA.data0 = (GUARD_1 >> 13) & 0xf;                    // Attr1
-    VERA.data0 = xPos & 0xff;                              // Attr2
-    VERA.data0 = xPos >> 8;                                // Attr3
-    VERA.data0 = yPos & 0xff;                              // Attr4
-    VERA.data0 = yPos >> 8;                                // Attr5
-    VERA.data0 = (3 << 2);                                 // Attr6
-    VERA.data0 = 0;                                        // Attr7
+        // Sprite attribute settings
+        vpoke((GUARD_1 >> 5) & 0xff, 0x1f5000 + 8 * (i + 1));  // Attr0
+        VERA.data0 = (GUARD_1 >> 13) & 0xf;                    // Attr1
+        VERA.data0 = xPos & 0xff;                              // Attr2
+        VERA.data0 = xPos >> 8;                                // Attr3
+        VERA.data0 = yPos & 0xff;                              // Attr4
+        VERA.data0 = yPos >> 8;                                // Attr5
+        VERA.data0 = (3 << 2);                                 // Attr6
+        VERA.data0 = 0;                                        // Attr7
 
 #ifdef DEBUG
-    // displayGuard(guardCount);
+        // displayGuard(guardCount);
 #endif
-    guardCount++;
+        guardCount++;
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int8_t guardId(uint8_t x, uint8_t y)

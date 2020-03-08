@@ -50,18 +50,16 @@ extern struct guard_t guard[MAX_GUARDS];
 
 extern struct shakeGuard_t shake[MAX_GUARDS];
 
-extern uint8_t guardCount;
-
-void clearGuards(void);
-void initGuard(uint8_t x, uint8_t y);
-int8_t guardId(uint8_t x, uint8_t y);
-int8_t guardAlive(uint8_t x, uint8_t y);
-void guardReborn(uint8_t x, uint8_t y);
-void removeFromShake(uint8_t id);
+extern void clearGuards(void);
+extern uint8_t initGuard(uint8_t x, uint8_t y);
+extern int8_t guardId(uint8_t x, uint8_t y);
+extern int8_t guardAlive(uint8_t x, uint8_t y);
+extern void guardReborn(uint8_t x, uint8_t y);
+extern void removeFromShake(uint8_t id);
 
 // Entry point from main loop to shake guards prior to 
 // them climbing out of holes
-void processGuardShake(void);
+extern void processGuardShake(void);
 
 // Entry point from main loop to move guards
 extern void moveGuard(void);

@@ -167,15 +167,14 @@ int loadLevel(uint8_t world, uint8_t level)
 
                 switch (tile1) {
                     case TILE_GUARD:
-                        // TODO: Initiaze guard and set tile as blank
-                        map[idx * 2][row].act = TILE_GUARD;
-                        map[idx * 2][row].base = TILE_BLANK;
-                        if (guardCount == MAX_GUARDS) {
+                        if (initGuard(idx*2,row)) {
+                            map[idx * 2][row].act = TILE_GUARD;
+                            map[idx * 2][row].base = TILE_BLANK;
+                        } else {
                             // Too many guards
                             map[idx * 2][row].act = TILE_BLANK;
                             continue;
                         }
-                        initGuard(idx*2,row);
                         break;
                     case TILE_RUNNER:
                         // If runner hasn't been found yet, then initialize
@@ -200,15 +199,14 @@ int loadLevel(uint8_t world, uint8_t level)
                 }
                 switch (tile2) {
                     case TILE_GUARD:
-                        // TODO: Initiaze guard and set tile as blank
-                        map[idx * 2 + 1][row].act = TILE_GUARD;
-                        map[idx * 2 + 1][row].base = TILE_BLANK;
-                        if (guardCount == MAX_GUARDS) {
+                        if (initGuard(idx*2+1,row)) {
+                            map[idx * 2 + 1][row].act = TILE_GUARD;
+                            map[idx * 2 + 1][row].base = TILE_BLANK;
+                        } else {
                             // Too many guards
                             map[idx * 2 + 1][row].act = TILE_BLANK;
                             continue;
                         }
-                        initGuard(idx*2+1,row);
                         break;
                     case TILE_RUNNER:
                         // If runner hasn't been found yet, then initialize

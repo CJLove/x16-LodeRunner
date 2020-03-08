@@ -13,7 +13,7 @@ OBJ = $(SRC:%.c=%.o)
 #	cl65 -t cx16 -I $(INCLUDE) -Oi $<
 
 lode_runner: mainloop.c $(SRC)
-	cl65 -t cx16 --listing test.txt $(INCLUDES) $(LIBRARIES) -Oi -o lode_runner.prg mainloop.c $(SRC) libX16.lib cx16.lib
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o lode_runner.prg mainloop.c $(SRC) libX16.lib cx16.lib
 
 PALETTE.BIN: ../assets/palette.txt
 	../scripts/ascii2bin.py --input ../assets/palette.txt --output PALETTE.BIN --addr 1000
