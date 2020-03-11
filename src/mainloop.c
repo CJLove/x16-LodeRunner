@@ -11,24 +11,41 @@
 #include "levels.h"
 #include "sound.h"
 
+static uint8_t processTick[SPEED_OPTIONS][SPEED_TICKS] = {
+    // SLOW - 3 out of 6 ticks
+    { 1, 0, 1, 0, 1, 0 },
+    // MEDIUM - 4 out of 6 ticks
+    { 1, 1, 0, 1, 1, 0 },
+    // FAST - 6 out of 6 ticks
+    { 1, 1, 1, 1, 1, 1 }
+};
+
 // Main loop while playing the game
 void playGame() {
-    if (currentLevel.goldComplete && runner.y == 0 && runner.yOffset == 0) {
-        currentGame.gameState = GAME_FINISH;
-        return;
+    static uint8_t tick = 0;
+
+    if (processTick[currentGame.speed][tick] ) {
+        if (currentLevel.goldComplete && runner.y == 0 && runner.yOffset == 0) {
+            currentGame.gameState = GAME_FINISH;
+            return;
+        }
+
+        if (!isDigging()) {
+            moveRunner();
+        } else {
+            processDigHole();
+        }
+        if (currentGame.gameState != GAME_RUNNER_DEAD) moveGuard();
+
+        processGuardShake();
     }
 
-    if (!isDigging()) {
-        moveRunner();
-    } else {
-        processDigHole();
-    }
-    if (currentGame.gameState != GAME_RUNNER_DEAD) moveGuard();
+    tick++;
+    if (tick == SPEED_TICKS) tick = 0;
 
-    playSoundFx();
-    processGuardShake();
     processFillHole();
-    // TODO: processReborn();
+    playSoundFx();
+
 }
 
 static uint8_t scoreCount;
@@ -139,7 +156,7 @@ int main()
         printf("failed to load all resources\n");
         return result;
     }
-
+    initLevels();
     currentGame.currentScore = 0;
 
     screenConfig();

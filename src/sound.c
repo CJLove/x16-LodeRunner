@@ -1,4 +1,5 @@
 #include "ym2151.h"
+#include "levels.h"
 #include "sound.h"
 
 
@@ -273,6 +274,9 @@ static uint16_t soundMask = 0;
 
 void playSoundFx(void)
 {
+    // If sound is disabled then do nothing
+    if (currentGame.sound == SOUND_OFF) return;
+
     if (soundMask & PLAY_FALL) {
         if (playFx(&fallFx)) {
             soundMask &= ~PLAY_FALL;
@@ -345,7 +349,8 @@ void stopDiggingFx(void)
 // Function to play the runner death sound effect
 void playDeadFx(void)
 {
-    playFxSync(&deadFx);
+    if (currentGame.sound == SOUND_ON)
+        playFxSync(&deadFx);
 }
 
 // Functions to play/preempt the level completion scoring sound effect

@@ -2,6 +2,7 @@
 #include <cx16.h>
 #include <conio.h>
 #include <unistd.h>
+#include "levels.h"
 #include "loderunner.h"
 
 // Test application which displays splash screen
@@ -23,21 +24,32 @@ int main()
         printf("failed to load all resources\n");
         return result;
     }
+    initLevels();
 
+    // while (1) {
+    //     if (kbhit()) {
+    //         uint8_t c = cgetc();
+    //         printf("%d\n",c);
+    //     }
+    // }
     screenConfig();
 
-    // Bank 0
-    VIA1.pra = 21;
-    for (x = 0; x < 30; x++) {
-        for (y = 0; y < 28; y++) {
-            uint8_t tile = tilemap[x + y*30];
-            setTile(x+5,y,tile,0);
-        }
-    }
+    splash();
 
-    setTile(3,17,28,0);
+    // // Bank 0
+    // VIA1.pra = 21;
+    // for (x = 0; x < 40; x++) {
+    //     for (y = 0; y < 29; y++) {
+    //         uint8_t tile = tilemap[x + y*40];
+    //         setTile(x,y,tile,0);
+    //     }
+    // }
 
-    sleep(10);
+    // setTile(1,16,28,0);
+    // setTile(28,16,28,0);
+    // setTile(28,22,28,0);
+
+    // sleep(10);
 
     return result;
 }

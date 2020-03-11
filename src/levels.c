@@ -130,6 +130,28 @@ void displayStatus(uint32_t score, uint8_t level)
     }
 }
 
+void initLevels()
+{    
+    VIA1.pra = WORLD_CLASSIC;
+    currentGame.maxLevels[WORLD_IDX_CLASSIC] = *(uint8_t *)(LEVEL_COUNT + 1);
+    printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_CLASSIC]);
+    VIA1.pra = WORLD_CHAMP;
+    currentGame.maxLevels[WORLD_IDX_CHAMP] = *(uint8_t *)(LEVEL_COUNT + 1);
+    printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_CHAMP]);
+    VIA1.pra = WORLD_PRO;
+    currentGame.maxLevels[WORLD_IDX_PRO] = *(uint8_t *)(LEVEL_COUNT + 1);
+    printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_PRO]);
+    VIA1.pra = WORLD_FANBOOK;
+    currentGame.maxLevels[WORLD_IDX_FANBOOK] = *(uint8_t *)(LEVEL_COUNT + 1);
+    printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_FANBOOK]);
+    VIA1.pra = WORLD_REVENGE;
+    currentGame.maxLevels[WORLD_IDX_REVENGE] = *(uint8_t *)(LEVEL_COUNT + 1);
+    printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_REVENGE]);
+    VIA1.pra = WORLD_CUSTOM;
+    currentGame.maxLevels[WORLD_IDX_CUSTOM] = *(uint8_t *)(LEVEL_COUNT + 1);
+    printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_CUSTOM]);
+}
+
 // Load a level from banked RAM into the map[] representation
 int loadLevel(uint8_t world, uint8_t level)
 {
