@@ -7,7 +7,13 @@ This port is (so far :smile:) being written in C using the [CC65](https://cc65.g
 ![](runner.gif)
 
 ## Game Play
-From the splash screen use cursor up/down keys to select the world.  Use `ENTER` to begin play.
+From the splash screen the following keys to select game options:
+* Cursor up/down select the world
+* Cursor left/right toggle sound
+* `<` and `>` adjust the game speed
+* `-` and `+` adjust the starting level
+
+Use `ENTER` to begin play.
 
 Use cursor arrow keys to move the runner, `CTRL` to dig left and `ALT` to dig right.  Use `ENTER` to kill the runner if trapped.
 
