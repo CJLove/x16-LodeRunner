@@ -1,11 +1,11 @@
 .PHONY: all clean
 
-LIBRARIES := -L ../libX16/lib
+LIBRARIES := -L ../libX16/lib -L ../libX16Test/lib
 
-INCLUDES := -I ../libX16/include -I ../src
+INCLUDES := -I ../libX16/include -I ../libX16Test/include -I ../src
 
 SRC = \
-	../src/loader.c ../src/screen.c ../src/levels.c ../src/runner.c ../src/key.c ../src/guard.c ../src/splash.c ../src/sound.c
+	../src/state.c ../src/loader.c ../src/screen.c ../src/levels.c ../src/runner.c ../src/key.c ../src/guard.c ../src/splash.c ../src/sound.c
 
 test_keys: test_keys.c $(SRC)
 	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_keys.prg test_keys.c $(SRC) libX16.lib cx16.lib
@@ -24,6 +24,10 @@ test_splash: test_splash.c $(SRC)
 
 test_sprites: test_sprites.c $(SRC)
 	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_sprites.prg test_sprites.c $(SRC) libX16.lib cx16.lib
+
+test_unitRunner: test_main.c testRunner.c ../src/levels.c ../src/runner.c
+	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_unitRunner.prg test_main.c testRunner.c ../src/levels.c ../src/runner.c ../src/state.c  libX16.lib libX16Test.lib cx16.lib
+
 
 PALETTE.BIN: ../assets/palette.txt
 	../scripts/ascii2bin.py --input ../assets/palette.txt --output PALETTE.BIN --addr 1000

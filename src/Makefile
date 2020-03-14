@@ -5,7 +5,7 @@ LIBRARIES := -L ../libX16/lib
 INCLUDES := -I ../libX16/include
 
 SRC = \
-	loader.c screen.c levels.c runner.c key.c guard.c splash.c sound.c
+	state.c loader.c screen.c levels.c runner.c key.c guard.c splash.c sound.c
 
 OBJ = $(SRC:%.c=%.o)
 

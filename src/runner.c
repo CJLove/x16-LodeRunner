@@ -10,8 +10,7 @@
 #include <string.h>
 #include <unistd.h>
 
-// Runner state information
-struct runner_t runner;
+
 
 // Convert sprite image VRAM address to the sprite attribute 0: Address(12:5)
 #define IMAGE_ADDR(addr) ((addr >> 5) & 0xff)
@@ -302,6 +301,8 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
     uint8_t centerY = 0;
     uint8_t *imgPtr = NULL;
 
+//    printf("Here w/action=%d stayCurrentPos=%d\n",action,stayCurrentPos);
+    
     centerX = centerY = ACT_STOP;
 
     switch (action) {
@@ -680,7 +681,7 @@ void moveRunner()
     }
 
     // Check key action
-    act = keyAction();
+    act = inputHandler();// keyAction();
     // Debug: show key action @ 38,3
     // if (act != ACT_UNKNOWN) {
     //     setTile(38, 3, act + 48, 0);

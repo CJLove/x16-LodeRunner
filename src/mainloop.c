@@ -10,6 +10,7 @@
 #include "guard.h"
 #include "levels.h"
 #include "sound.h"
+#include "key.h"
 
 static uint8_t processTick[SPEED_OPTIONS][SPEED_TICKS] = {
     // SLOW - 3 out of 6 ticks
@@ -133,6 +134,8 @@ int main()
 
     // Install CX16 joystick driver
     joy_install(cx16_std_joy);
+
+    inputHandler = keyAction;
 
     // Not supported for CX16
     // kbrepeat(KBREPEAT_ALL);

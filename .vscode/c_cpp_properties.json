@@ -1,6 +1,6 @@
 {
     "env": {
-      "myDefaultIncludePath": ["${workspaceFolder}/src", "${workspaceFolder}/libX16/include", "${workspaceFolder}/src"],
+      "myDefaultIncludePath": ["${workspaceFolder}/src", "${workspaceFolder}/libX16/include", "${workspaceFolder}/libX16Test/include","${workspaceFolder}/src"],
       "myCompilerPath": "/usr/local/share/cc65/include/"
     },
     "configurations": [

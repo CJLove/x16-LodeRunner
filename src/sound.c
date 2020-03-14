@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "ym2151.h"
 #include "levels.h"
 #include "sound.h"
@@ -351,6 +352,8 @@ void playDeadFx(void)
 {
     if (currentGame.sound == SOUND_ON)
         playFxSync(&deadFx);
+    else
+        sleep(3);
 }
 
 // Functions to play/preempt the level completion scoring sound effect

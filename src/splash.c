@@ -105,6 +105,8 @@ void splash()
     currentGame.lives = 5;
     // Default to fast speed
     currentGame.speed = SPEED_FAST;
+    // Default to sound on
+    currentGame.sound = SOUND_ON;
 
     setTile(1, splashWorlds[worldIdx].y, 28, 0);
     setTile(28, speedOptions[speedIdx].y, 28, 0);

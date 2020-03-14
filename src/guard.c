@@ -6,9 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct guard_t guard[MAX_GUARDS];
 
-struct shakeGuard_t shake[MAX_GUARDS];
 
 static uint8_t guardCount;
 

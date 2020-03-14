@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <unistd.h>
 #include "loderunner.h"
+#include "levels.h"
 
 // Test application which allows browsing levels in all loaded worlds
 

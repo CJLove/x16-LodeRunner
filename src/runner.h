@@ -22,6 +22,10 @@ struct runner_t {
     uint8_t sequence;
 };
 
+typedef int8_t (*keyFcn)(void);
+
+extern keyFcn inputHandler;
+
 extern struct runner_t runner;
 
 extern void clearRunner(void);
