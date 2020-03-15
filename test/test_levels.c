@@ -10,7 +10,7 @@
 int main()
 {
     int result = 0;
-    uint8_t world = WORLD_CLASSIC;
+    uint8_t world = WORLD_CUSTOM;
     uint8_t level = 1;
     printf("loading resources...\n");
     

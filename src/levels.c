@@ -253,7 +253,7 @@ int loadLevel(uint8_t world, uint8_t level)
                 }
             }
         }
-        printf("loaded level %d in world %d\n",currentGame.level,currentGame.world);
+        //printf("loaded level %d in world %d\n",currentGame.level,currentGame.world);
         return 1;
     }
 

@@ -25,8 +25,8 @@ test_splash: test_splash.c $(SRC)
 test_sprites: test_sprites.c $(SRC)
 	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_sprites.prg test_sprites.c $(SRC) libX16.lib cx16.lib
 
-test_unitRunner: test_main.c testRunner.c ../src/levels.c ../src/runner.c
-	cl65 -t cx16 $(INCLUDES) $(LIBRARIES) -Oi -o test_unitRunner.prg test_main.c testRunner.c ../src/levels.c ../src/runner.c ../src/state.c  libX16.lib libX16Test.lib cx16.lib
+test_unitRunner: test_main.c testRunner.c ../src/levels.c ../src/runner.c ../src/loader.c
+	cl65 -t cx16 --listing list.txt $(INCLUDES) $(LIBRARIES) -Oi -o test_unitRunner.prg test_main.c testRunner.c ../src/levels.c ../src/loader.c ../src/runner.c ../src/state.c  libX16.lib libX16Test.lib cx16.lib
 
 
 PALETTE.BIN: ../assets/palette.txt
@@ -53,8 +53,8 @@ FANBOOK.BIN: ../assets/fanbook.json ../scripts/levels.py
 REVENGE.BIN: ../assets/revenge.json ../scripts/levels.py
 	../scripts/levels.py --input ../assets/revenge.json --output REVENGE.BIN
 
-CUSTOM.BIN: ../assets/custom.json ../scripts/levels.py
-	../scripts/levels.py --input ../assets/custom.json --output CUSTOM.BIN
+CUSTOM.BIN: custom.json ../scripts/levels.py
+	../scripts/levels.py --input ./custom.json --output CUSTOM.BIN
 
 
 SPRITES.BIN: ../assets/sprites.txt ../scripts/graphic.py

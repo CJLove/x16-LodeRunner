@@ -75,6 +75,7 @@ static uint8_t digRight[2][DIG_LENGTH] = {
 // Define this to debug hole fill (NOTE: slows down the game)
 //#define DEBUG_FILL
 
+#ifdef DEBUG
 // Debug: display runner x & xOffset, y & yOffset
 void displayPos()
 {
@@ -189,6 +190,7 @@ void displayGold()
         setTile(36+i,20,buffer[i],0);
     }
 }
+#endif
 
 void decGold()
 {
@@ -301,7 +303,7 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
     uint8_t centerY = 0;
     uint8_t *imgPtr = NULL;
 
-//    printf("Here w/action=%d stayCurrentPos=%d\n",action,stayCurrentPos);
+    //printf("Here w/x=%d y=%d action=%d stayCurrentPos=%d\n",x,y,action,stayCurrentPos);
     
     centerX = centerY = ACT_STOP;
 

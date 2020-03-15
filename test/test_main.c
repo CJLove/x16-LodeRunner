@@ -6,9 +6,13 @@
 
 int main()
 {
-    //loadFiles();
+    loadFiles();
 
     registerTestModule(testRunnerLeft,"runnerMovingLeft");
+    registerTestModule(testRunnerRight,"runnerMovingRight");
+    registerTestModule(testRunnerUp,"runnerMovingUp");
+    registerTestModule(testRunnerDown,"runnerMovingDown");
+    registerTestModule(testRunnerFall,"runnerMovingFall");
 
     return x16testmain(TEST_NO_EXIT);
 
