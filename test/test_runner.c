@@ -7,6 +7,7 @@
 #include "loderunner.h"
 #include "levels.h"
 #include "runner.h"
+#include "key.h"
 
 // Test application which tests animation of runner and guard
 
@@ -16,7 +17,7 @@ int main()
     currentGame.world = WORLD_CLASSIC;
     currentGame.level = 1;
     currentGame.lives = 5;
- 
+    inputHandler = keyAction;
     printf("loading resources...\n");
     
     result = loadFiles();
@@ -49,7 +50,6 @@ int main()
 
         processFillHole();
     } while (1);
-
 
     return result;
 }
