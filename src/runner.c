@@ -273,22 +273,15 @@ void initRunner(uint8_t x, uint8_t y)
     runner.direction = ACT_RIGHT;
     runner.sequence = RUN_SEQUENCE;
 
-    // Sprite attribute settings
+    // Sprite attribute settings - memory increment set to 1
     vpoke((RUNNER_1 >> 5) & 0xff, 0x11fc00);  // Attr0
-    vpoke((RUNNER_1 >> 13) & 0xf, 0x1fc01);  // Attr1
-    vpoke(xPos & 0xff,0x1fc02);              // Attr2
-    vpoke(xPos >> 8, 0x1fc03);               // Attr3
-    vpoke(yPos & 0xff, 0x1fc04);             // Attr4
-    vpoke(yPos >> 8, 0x1fc05);               // Attr5
-    vpoke((3 << 2), 0x1fc06);                // Attr6
-    vpoke(0, 0x1fc07);                       // Attr7
-    // VERA.data0 = (RUNNER_1 >> 13) & 0xf;      // Attr1
-    // VERA.data0 = xPos & 0xff;                 // Attr2
-    // VERA.data0 = xPos >> 8;                   // Attr3
-    // VERA.data0 = yPos & 0xff;                 // Attr4
-    // VERA.data0 = yPos >> 8;                   // Attr5
-    // VERA.data0 = (3 << 2);                    // Attr6
-    // VERA.data0 = 0;                           // Attr7
+    VERA.data0 = (RUNNER_1 >> 13) & 0xf;      // Attr1
+    VERA.data0 = xPos & 0xff;                 // Attr2
+    VERA.data0 = xPos >> 8;                   // Attr3
+    VERA.data0 = yPos & 0xff;                 // Attr4
+    VERA.data0 = yPos >> 8;                   // Attr5
+    VERA.data0 = (3 << 2);                    // Attr6
+    VERA.data0 = 0;                           // Attr7
     VERA.dc_video |= 0x40;
 
 #ifdef DEBUG

@@ -272,8 +272,8 @@ int displayLevel(uint8_t level)
 
     // Disable sprites
     VERA.dc_video &= (~0x40);
-    // VERA.l1_hscroll = (hscroll & 0xff);
-    // VERA.l1_hscroll_hi = (hscroll & 0xf00) / 0x100;
+    VERA.l1_hscroll = (hscroll & 0xff);
+    VERA.l1_hscroll_hi = (hscroll & 0xf00) / 0x100;
     
     for (row = 0; row < LEVEL_ROW_COUNT; row++) {
         for (col = 0; col < LEVEL_ROW_OFFSET; col++) {
@@ -290,15 +290,15 @@ int displayLevel(uint8_t level)
     }
     displayStatus(0, level);
 
-    // while (hscroll > 0) {
-    //     VERA.l1_hscroll = (hscroll & 0xff);
-    //     VERA.l1_hscroll_hi = (hscroll & 0xf00) / 0x100;
+    while (hscroll > 0) {
+        VERA.l1_hscroll = (hscroll & 0xff);
+        VERA.l1_hscroll_hi = (hscroll & 0xf00) / 0x100;
 
-    //     hscroll -=4;
-    //     waitvsync();
-    // }
-    // VERA.l1_hscroll = 0;
-    // VERA.l1_hscroll_hi = 0;
+        hscroll -=4;
+        waitvsync();
+    }
+    VERA.l1_hscroll = 0;
+    VERA.l1_hscroll_hi = 0;
     // Enable sprites
     VERA.dc_video |= 0x40;
 

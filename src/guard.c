@@ -100,7 +100,7 @@ void clearGuards()
         guard[i].active = 0;
 
         // Disable the corresponding sprite
-        vpoke(0, 0x1f506 + 8 * (i + 1));  // Attr6
+        vpoke(0, 0x1fc06 + 8 * (i + 1));  // Attr6
 
         shake[i].active = 0;
     }
@@ -128,22 +128,22 @@ uint8_t initGuard(uint8_t x, uint8_t y)
 
         guard[i].sequence = RUN_SEQUENCE;
 
-        // Sprite attribute settings
+        // Sprite attribute settings - memory increment set to 1
         vpoke((GUARD_1 >> 5) & 0xff, 0x11fc00 + 8 * (i + 1));  // Attr0
-        vpoke((GUARD_1 >> 13) & 0xf, 0x1fc01 + 8 * (i + 1));  // Attr1
-        vpoke(xPos & 0xff,0x1fc02 + 8 * (i + 1));             // Attr2
-        vpoke(xPos >> 8,0x1fc03 + 8 * (i + 1));               // Attr3
-        vpoke(yPos & 0xff,0x1fc04 + 8 * (i + 1));             // Attr4
-        vpoke(yPos >> 8,0x1fc05 + 8 * (i + 1));               // Attr5
-        vpoke((3 << 2),0x1fc06 + 8 * (i + 1));                // Attr6
-        vpoke(0,0x1fc07 + 8 * (i + 1));                       // Attr7
-        // VERA.data0 = (GUARD_1 >> 13) & 0xf;                    // Attr1
-        // VERA.data0 = xPos & 0xff;                              // Attr2
-        // VERA.data0 = xPos >> 8;                                // Attr3
-        // VERA.data0 = yPos & 0xff;                              // Attr4
-        // VERA.data0 = yPos >> 8;                                // Attr5
-        // VERA.data0 = (3 << 2);                                 // Attr6
-        // VERA.data0 = 0;                                        // Attr7
+        // vpoke((GUARD_1 >> 13) & 0xf, 0x1fc01 + 8 * (i + 1));  // Attr1
+        // vpoke(xPos & 0xff,0x1fc02 + 8 * (i + 1));             // Attr2
+        // vpoke(xPos >> 8,0x1fc03 + 8 * (i + 1));               // Attr3
+        // vpoke(yPos & 0xff,0x1fc04 + 8 * (i + 1));             // Attr4
+        // vpoke(yPos >> 8,0x1fc05 + 8 * (i + 1));               // Attr5
+        // vpoke((3 << 2),0x1fc06 + 8 * (i + 1));                // Attr6
+        // vpoke(0,0x1fc07 + 8 * (i + 1));                       // Attr7
+        VERA.data0 = (GUARD_1 >> 13) & 0xf;                    // Attr1
+        VERA.data0 = xPos & 0xff;                              // Attr2
+        VERA.data0 = xPos >> 8;                                // Attr3
+        VERA.data0 = yPos & 0xff;                              // Attr4
+        VERA.data0 = yPos >> 8;                                // Attr5
+        VERA.data0 = (3 << 2);                                 // Attr6
+        VERA.data0 = 0;                                        // Attr7
 #ifdef DEBUG
         // displayGuard(guardCount);
 #endif
