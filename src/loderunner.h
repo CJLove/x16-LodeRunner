@@ -76,6 +76,16 @@
 #define GUARD_RAPPEL_2  0x1e200
 #define GUARD_RAPPEL_3  0x1e220
 
+// Base sprite attribute addresses for sprite 0
+#define SPRITE_ATTR0    0x1fc00
+#define SPRITE_ATTR1    0x1fc01
+#define SPRITE_ATTR2    0x1fc02
+#define SPRITE_ATTR3    0x1fc03
+#define SPRITE_ATTR4    0x1fc04
+#define SPRITE_ATTR5    0x1fc05
+#define SPRITE_ATTR6    0x1fc06
+#define SPRITE_ATTR7    0x1fc07
+
 #define MAX_GUARDS 6
 
 // Actions

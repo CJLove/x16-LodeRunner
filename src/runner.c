@@ -263,6 +263,7 @@ void initRunner(uint8_t x, uint8_t y)
 {
     uint16_t xPos = x * TILE_W;
     uint16_t yPos = y * TILE_H;
+    uint32_t spriteAttr0 = ((uint32_t)VERA_INC_1 << 16) |SPRITE_ATTR0;
 
     runner.x = x;
     runner.y = y;
@@ -274,7 +275,7 @@ void initRunner(uint8_t x, uint8_t y)
     runner.sequence = RUN_SEQUENCE;
 
     // Sprite attribute settings - memory increment set to 1
-    vpoke((RUNNER_1 >> 5) & 0xff, 0x11fc00);  // Attr0
+    vpoke((RUNNER_1 >> 5) & 0xff, spriteAttr0);  // Attr0
     VERA.data0 = (RUNNER_1 >> 13) & 0xf;      // Attr1
     VERA.data0 = xPos & 0xff;                 // Attr2
     VERA.data0 = xPos >> 8;                   // Attr3
@@ -282,7 +283,8 @@ void initRunner(uint8_t x, uint8_t y)
     VERA.data0 = yPos >> 8;                   // Attr5
     VERA.data0 = (3 << 2);                    // Attr6
     VERA.data0 = 0;                           // Attr7
-    VERA.dc_video |= 0x40;
+
+    vera_sprites_enable(1);
 
 #ifdef DEBUG
     displayPos();
@@ -533,16 +535,16 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         // Update the sprite image and flip bit based on the current sequence and index
         runner.idx++;
         runner.idx = runner.idx % runnerSeqSizes[runner.sequence];
-        vpoke(runnerSequences[runner.sequence][runner.idx], 0x1fc00);
-        vpoke((3 << 2) | dir, 0x1fc06);
+        vpoke(runnerSequences[runner.sequence][runner.idx], SPRITE_ATTR0);
+        vpoke((3 << 2) | dir, SPRITE_ATTR6);
 
         // sprite x position
-        vpoke(xPos & 0xff, 0x1fc02);
-        vpoke(xPos >> 8, 0x1fc03);
+        vpoke(xPos & 0xff, SPRITE_ATTR2);
+        vpoke(xPos >> 8, SPRITE_ATTR3);
 
         // sprite y position
-        vpoke(yPos & 0xff, 0x1fc04);
-        vpoke(yPos >> 8, 0x1fc05);
+        vpoke(yPos & 0xff, SPRITE_ATTR4);
+        vpoke(yPos >> 8, SPRITE_ATTR5);
 
         runner.x = x;
         runner.y = y;

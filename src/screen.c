@@ -10,18 +10,20 @@ int screenConfig()
     uint8_t y = 0;
 
     VERA.control = 0;
-    VERA.dc_video |= 0x20;      // Layer 1 enable
-    VERA.dc_hscale = 128;       // HSCALE=1
-    VERA.dc_vscale = 128;       // VSCALE=1
-    VERA.l0_config = 0x0;       // Disable Layer 0
+//    vera_layer_enable(0x1); // Enable layer 1, disable layer 2
+    VERA.display.video |= 0x20;      // Layer 1 enable
 
-    VERA.l1_config = 0xa1;      // 128x64 map, color depth 1
-    VERA.l1_mapbase = 0x0;      // Map base at 0x00000
-    VERA.l1_tilebase = 0x80;    // Tile base at 0x10000, 8x8 tiles
+    VERA.display.hscale = 128;       // HSCALE=1
+    VERA.display.vscale = 128;       // VSCALE=1
+    VERA.layer0.config = 0x0;       // Disable Layer 0
+
+    VERA.layer1.config = 0xa1;      // 128x64 map, color depth 1
+    VERA.layer1.mapbase = 0x0;      // Map base at 0x00000
+    VERA.layer1.tilebase = 0x80;    // Tile base at 0x10000, 8x8 tiles
 
     videomode(VIDEOMODE_40x30);
 
-    // Clear the tilemap
+    // Clear the full tilemap
     for (x = 0; x < 128; x++) {
         for (y = 0; y < 30; y++) {
             setTile(x,y,TILE_BLANK,0);

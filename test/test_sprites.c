@@ -12,7 +12,8 @@ int main()
     uint8_t tile = 0;
     uint16_t x = 16;
     uint16_t y = 16;
-    uint32_t sprite = 0x11fc00; // Address includes memory increment 1
+    uint32_t sprite = ((uint32_t)VERA_INC_1 << 16) |SPRITE_ATTR0;
+
     printf("loading resources...\n");
     
     result = loadFiles();
@@ -27,8 +28,6 @@ int main()
     screenConfig();
 
     // Runner sprite images
-
-    // vpoke() seems to be messing with VERA.data0 behavior
     vpoke((RUNNER_1 >> 5) & 0xff, sprite);      // Attr0
     VERA.data0 = (RUNNER_1 >>13) & 0xf;         // Attr1
     VERA.data0 = x & 0xff;                      // Attr2
@@ -244,8 +243,8 @@ int main()
     VERA.data0 = (3<<2);                        // Attr6
     VERA.data0 = 0;                             // Attr7       
 
-    // Enable
-    VERA.dc_video |= 0x40;
+    // Enable sprites
+    vera_sprites_enable(1);
 
     while (1) {
         waitvsync();
