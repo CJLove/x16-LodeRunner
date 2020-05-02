@@ -18,7 +18,7 @@ Use `ENTER` to begin play.
 Use cursor arrow keys to move the runner, `CTRL` to dig left and `ALT` to dig right.  Use `ENTER` to kill the runner if trapped.
 
 ## Building and Running
-Building requires the CC65 toolchain. Python3 scripts are used to build binary files from various assets. After cloning the repo, do the following:
+Building requires the CC65 toolchain with r37 support (commit [`cbf0c1d`](https://github.com/cc65/cc65/commit/cbf0c1d1dddc9d201ef3bf6ce9f3d5b54bc6e325)) or later. Python3 scripts are used to build binary files from various assets. After cloning the repo, do the following:
 ```bash
 git submodule update --init
 cd libX16/src
