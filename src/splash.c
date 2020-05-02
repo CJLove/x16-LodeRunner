@@ -38,7 +38,7 @@ static void displaySplash()
     VIA1.pra = 21;
 
     for (x = 0; x < 40; x++) {
-        for (y = 0; y < 29; y++) {
+        for (y = 0; y < 30; y++) {
             uint8_t tile = tilemap[x + y * 40];
             setTile(x, y, tile, 0);
         }
@@ -50,7 +50,7 @@ static void clearSplash()
     uint8_t x = 0;
     uint8_t y = 0;
     for (x = 0; x < 40; x++) {
-        for (y = 0; y < 29; y++) {
+        for (y = 0; y < 30; y++) {
             setTile(x, y, 0, 0);
         }
     }

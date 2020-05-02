@@ -26,7 +26,10 @@ int main()
     joy_install(cx16_std_joy);
 
     do {
-        int8_t act = keyAction();
+        int8_t act = 0;
+        waitvsync();
+
+        act = keyAction();
 
         switch (act) {
         case ACT_UNKNOWN: 

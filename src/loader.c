@@ -11,8 +11,26 @@ int loadFiles()
 
     // TODO: Look at EMULATOR->detect[0] and [1] to detect if running in emulator
 
+    // Initialize 0x1f9c0-0x1ffff to known values
+    // uint32_t vera = 0x1f9c0;
+    // VERA.address_hi = 0x10;
+
+    // vpoke(0,vera); vera++;
+    // for (; vera != 0x20000; vera++) {
+    //     VERA.data0 = 0;
+    // }
+
+    // // Load blank tilemap
+    // result = vload_host("tilemap.bin",0x00000);
+    // if (result)
+    //     printf("  loaded blank tilemap\n");
+    // else {
+    //     printf("  failed to load tilemap\n");
+    //     return 0;
+    // }
+
     // Load palette
-    result = vload_host("palette.bin",0xf1000);
+    result = vload_host("palette.bin",0x1fa00);
     if (result) 
         printf("  loaded palette\n");
     else {

@@ -274,16 +274,22 @@ void initRunner(uint8_t x, uint8_t y)
     runner.sequence = RUN_SEQUENCE;
 
     // Sprite attribute settings
-    vpoke((RUNNER_1 >> 5) & 0xff, 0x1f5000);  // Attr0
-    VERA.data0 = (RUNNER_1 >> 13) & 0xf;      // Attr1
-    VERA.data0 = xPos & 0xff;                 // Attr2
-    VERA.data0 = xPos >> 8;                   // Attr3
-    VERA.data0 = yPos & 0xff;                 // Attr4
-    VERA.data0 = yPos >> 8;                   // Attr5
-    VERA.data0 = (3 << 2);                    // Attr6
-    VERA.data0 = 0;                           // Attr7
-
-    vpoke(0x01, 0x1f4000);
+    vpoke((RUNNER_1 >> 5) & 0xff, 0x11fc00);  // Attr0
+    vpoke((RUNNER_1 >> 13) & 0xf, 0x1fc01);  // Attr1
+    vpoke(xPos & 0xff,0x1fc02);              // Attr2
+    vpoke(xPos >> 8, 0x1fc03);               // Attr3
+    vpoke(yPos & 0xff, 0x1fc04);             // Attr4
+    vpoke(yPos >> 8, 0x1fc05);               // Attr5
+    vpoke((3 << 2), 0x1fc06);                // Attr6
+    vpoke(0, 0x1fc07);                       // Attr7
+    // VERA.data0 = (RUNNER_1 >> 13) & 0xf;      // Attr1
+    // VERA.data0 = xPos & 0xff;                 // Attr2
+    // VERA.data0 = xPos >> 8;                   // Attr3
+    // VERA.data0 = yPos & 0xff;                 // Attr4
+    // VERA.data0 = yPos >> 8;                   // Attr5
+    // VERA.data0 = (3 << 2);                    // Attr6
+    // VERA.data0 = 0;                           // Attr7
+    VERA.dc_video |= 0x40;
 
 #ifdef DEBUG
     displayPos();
@@ -534,16 +540,16 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         // Update the sprite image and flip bit based on the current sequence and index
         runner.idx++;
         runner.idx = runner.idx % runnerSeqSizes[runner.sequence];
-        vpoke(runnerSequences[runner.sequence][runner.idx], 0x1f5000);
-        vpoke((3 << 2) | dir, 0x1f5006);
+        vpoke(runnerSequences[runner.sequence][runner.idx], 0x1fc00);
+        vpoke((3 << 2) | dir, 0x1fc06);
 
         // sprite x position
-        vpoke(xPos & 0xff, 0x1f5002);
-        VERA.data0 = xPos >> 8;
+        vpoke(xPos & 0xff, 0x1fc02);
+        vpoke(xPos >> 8, 0x1fc03);
 
         // sprite y position
-        vpoke(yPos & 0xff, 0x1f5004);
-        VERA.data0 = yPos >> 8;
+        vpoke(yPos & 0xff, 0x1fc04);
+        vpoke(yPos >> 8, 0x1fc05);
 
         runner.x = x;
         runner.y = y;

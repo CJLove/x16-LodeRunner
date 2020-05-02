@@ -35,6 +35,9 @@ PALETTE.BIN: ../assets/palette.txt
 SPLASH.BIN: ../assets/splash.txt
 	../scripts/ascii2bin.py --input ../assets/splash.txt --output SPLASH.BIN --addr a000
 
+TILEMAP.BIN: ../assets/tilemap.txt
+	../scripts/ascii2bin.py --input ../assets/splash.txt --output TILEMAP.BIN --addr 0000	
+
 TILES.BIN: ../assets/tiles.txt
 	../scripts/graphic.py --input ../assets/tiles.txt --output TILES.BIN --x 8 --y 8 --bpp 2 --addr 0000
 
