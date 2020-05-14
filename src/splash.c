@@ -36,6 +36,7 @@ static void displaySplash()
     uint8_t *tilemap = (uint8_t *)0xa000;
     // Bank 21 for splash tilemap
     VIA1.pra = 21;
+    setTileOffsets(0,0);
 
     for (x = 0; x < 40; x++) {
         for (y = 0; y < 30; y++) {

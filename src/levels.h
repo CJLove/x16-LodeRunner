@@ -25,6 +25,10 @@
 #define MAX_TILE_X  27
 #define MAX_TILE_Y  15
 
+// X/Y Offsets to center the screen
+#define X_OFFSET    6
+#define Y_OFFSET    6
+
 // Tile dimensions
 #define TILE_H  8
 #define TILE_W  8

@@ -115,8 +115,8 @@ uint8_t initGuard(uint8_t x, uint8_t y)
 
     if (guardCount < MAX_GUARDS) {
         uint8_t i = guardCount;
-        uint16_t xPos = x * TILE_W;
-        uint16_t yPos = y * TILE_H;
+        uint16_t xPos = (x + X_OFFSET) * TILE_W;
+        uint16_t yPos = (y + Y_OFFSET) * TILE_H;
 
         guard[i].x = x;
         guard[i].y = y;
@@ -819,8 +819,8 @@ void guardMoveStep(uint8_t id, uint8_t action)
         }
     }
     else {
-        uint16_t xPos = x * TILE_W + xOffset;
-        uint16_t yPos = y * TILE_H + yOffset;
+        uint16_t xPos = (x + X_OFFSET) * TILE_W + xOffset;
+        uint16_t yPos = (y + Y_OFFSET) * TILE_H + yOffset;
         uint8_t dir = (curGuard->direction == ACT_LEFT) ? 1 : 0;
         if (curGuard->action == ACT_CLIMB_OUT)
             action = ACT_CLIMB_OUT;
@@ -935,7 +935,7 @@ void processGuardShake()
 
             if (shake[i].count >= shakeTimes[shake[i].idx]) {
                 // Shake the guard by shifting its X position
-                uint16_t xPos = curGuard->x * TILE_W;
+                uint16_t xPos = (curGuard->x + X_OFFSET)* TILE_W;
                 if (shake[i].idx % 2) {
                     xPos -= 2;
                 }

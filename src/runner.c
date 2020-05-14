@@ -261,8 +261,8 @@ void clearRunner() { memset(&runner, 0, sizeof(runner)); }
 
 void initRunner(uint8_t x, uint8_t y)
 {
-    uint16_t xPos = x * TILE_W;
-    uint16_t yPos = y * TILE_H;
+    uint16_t xPos = (x + X_OFFSET) * TILE_W;
+    uint16_t yPos = (y + Y_OFFSET) * TILE_H;
     uint32_t spriteAttr0 = ((uint32_t)VERA_INC_1 << 16) |SPRITE_ATTR0;
 
     runner.x = x;
@@ -528,8 +528,8 @@ void runnerMoveStep(uint8_t action, uint8_t stayCurrentPos)
         }
     }
     else {
-        uint16_t xPos = x * TILE_W + xOffset;
-        uint16_t yPos = y * TILE_H + yOffset;
+        uint16_t xPos = (x + X_OFFSET) * TILE_W + xOffset;
+        uint16_t yPos = (y + Y_OFFSET) * TILE_H + yOffset;
         uint8_t dir = (runner.direction == ACT_LEFT) ? 1 : 0;
 
         // Update the sprite image and flip bit based on the current sequence and index

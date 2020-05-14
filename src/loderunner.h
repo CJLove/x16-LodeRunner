@@ -143,6 +143,7 @@ extern int loadFiles();
 // Screen configuration and tile set/get - screen.c
 extern int screenConfig();
 extern void screenReset();
+extern void setTileOffsets(uint8_t x, uint8_t y);
 extern void setTile(uint8_t x, uint8_t y, uint8_t tile, uint8_t paletteOffset);
 extern uint8_t getTile(uint8_t x, uint8_t y);
 extern uint8_t getTileXY (uint16_t x, uint16_t y);

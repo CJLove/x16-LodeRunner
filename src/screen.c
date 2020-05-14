@@ -37,11 +37,21 @@ void screenReset()
     videomode(VIDEOMODE_80x60);
 }
 
+static uint8_t xOffset = 0;
+static uint8_t yOffset = 0;
+
+void setTileOffsets(uint8_t x, uint8_t y)
+{
+    xOffset = x;
+    yOffset = y;
+}
 
 void setTile(uint8_t x, uint8_t y, uint8_t tile, uint8_t paletteOffset)
 {
-    vpoke(tile, y*OFFSET + x*2);
-    vpoke(paletteOffset, y*OFFSET + x*2 +1);
+    unsigned long addr = ((uint32_t)VERA_INC_1 << 16) | (y+yOffset)*OFFSET + (x+xOffset)*2;
+    vpoke(tile, addr);
+    VERA.data0 = paletteOffset;
+    //vpoke(paletteOffset, (y+yOffset)*OFFSET + (x+xOffset)*2 +1);
 }
 
 uint8_t getTile(uint8_t x, uint8_t y)

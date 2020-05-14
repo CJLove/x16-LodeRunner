@@ -273,6 +273,8 @@ int displayLevel(uint8_t level)
     // Disable sprites
     vera_sprites_enable(0);
 
+    setTileOffsets(X_OFFSET,Y_OFFSET);
+
     VERA.layer1.hscroll = hscroll;
     
     for (row = 0; row < LEVEL_ROW_COUNT; row++) {
