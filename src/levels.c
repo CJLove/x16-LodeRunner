@@ -332,7 +332,7 @@ void gameOver()
 {
     uint8_t i = 0;
     // Disable sprites
-    vpoke(0x00, 0x1f4000);
+    vera_sprites_enable(0);
     for (i = 0; i < 11; i++) {
         setTile(9+i,7,gameOverTiles[0][i],0);
         setTile(9+i,8,gameOverTiles[1][i],0);

@@ -59,10 +59,14 @@ static void clearSplash()
 
 static void clearKeyboardBuffer()
 {
-    // Bank 0
+    // Hack to clear the keyboard buffer by setting the KEY_COUNT
+    // memory location in Bank 0 to zero.  Revisit the memory location
+    // for each rom version.
+
+    // Switch to Bank 0
     VIA1.pra = 0;
     {
-        uint8_t *keyCount = (uint8_t *)0xa00b;
+        uint8_t *keyCount = (uint8_t *)0xa00a;
         *keyCount = 0;
     }
 }
