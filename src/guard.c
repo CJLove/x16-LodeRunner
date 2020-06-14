@@ -5,8 +5,7 @@
 #include <cx16.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-
+#include <vera.h>
 
 static uint8_t guardCount;
 
@@ -45,32 +44,10 @@ static uint8_t guardSeqSizes[MAX_SEQUENCE] = {RUN_LENGTH, CLIMB_LENGTH, RAPPEL_L
 
 // Original movePolicy array from Lode Runner Total Recall
 static uint8_t movePolicy[12][NUM_MOVE_ITEMS] = {
-    {0, 0, 0, 0, 0, 0}, 
-    {0, 1, 1, 0, 1, 1}, 
-    {1, 1, 1, 1, 1, 1}, 
-    {1, 2, 1, 1, 2, 1}, 
-    {1, 2, 2, 1, 2, 2}, 
-    {2, 2, 2, 2, 2, 2},
-    {2, 2, 3, 2, 2, 3}, 
-    {2, 3, 3, 2, 3, 3}, 
-    {3, 3, 3, 3, 3, 3}, 
-    {3, 3, 4, 3, 3, 4}, 
-    {3, 4, 4, 3, 4, 4}, 
-    {4, 4, 4, 4, 4, 4}
-};
+    {0, 0, 0, 0, 0, 0}, {0, 1, 1, 0, 1, 1}, {1, 1, 1, 1, 1, 1}, {1, 2, 1, 1, 2, 1}, {1, 2, 2, 1, 2, 2}, {2, 2, 2, 2, 2, 2},
+    {2, 2, 3, 2, 2, 3}, {2, 3, 3, 2, 3, 3}, {3, 3, 3, 3, 3, 3}, {3, 3, 4, 3, 3, 4}, {3, 4, 4, 3, 4, 4}, {4, 4, 4, 4, 4, 4}};
 
-// Revised movePolicy array when guard movement was overly aggressive
-// static uint8_t movePolicy[7][NUM_MOVE_ITEMS] = {
-//     {0, 0, 0, 0, 0, 0},     // 0 guards
-//     {0, 1, 0, 1, 0, 0},     // 1 guard
-//     {1, 1, 0, 1, 1, 0},     // 2 guards
-//     {1, 1, 1, 1, 1, 0},     // 3 guards
-//     {1, 2, 2, 1, 2, 2},     // 4 guards
-//     {2, 2, 2, 2, 2, 2},     // 5 guards
-//     {2, 2, 3, 2, 2, 3}      // 6 guards
-// };
-
-// Offset into 
+// Offset into
 uint8_t moveOffset = 0;
 // The ID of the last guard that was moved
 uint8_t moveId = 0;
@@ -111,7 +88,7 @@ void clearGuards()
 
 uint8_t initGuard(uint8_t x, uint8_t y)
 {
-    uint32_t spriteAttr0 = ((uint32_t)VERA_INC_1 << 16) |SPRITE_ATTR0;
+    uint32_t spriteAttr0 = ((uint32_t)VERA_INC_1 << 16) | SPRITE_ATTR0;
 
     if (guardCount < MAX_GUARDS) {
         uint8_t i = guardCount;
@@ -131,20 +108,21 @@ uint8_t initGuard(uint8_t x, uint8_t y)
         guard[i].sequence = RUN_SEQUENCE;
 
         // Sprite attribute settings - memory increment set to 1
-        vpoke((GUARD_1 >> 5) & 0xff, spriteAttr0 + 8 * (i + 1));// Attr0
-        VERA.data0 = (GUARD_1 >> 13) & 0xf;                     // Attr1
-        VERA.data0 = xPos & 0xff;                               // Attr2
-        VERA.data0 = xPos >> 8;                                 // Attr3
-        VERA.data0 = yPos & 0xff;                               // Attr4
-        VERA.data0 = yPos >> 8;                                 // Attr5
-        VERA.data0 = (3 << 2);                                  // Attr6
-        VERA.data0 = 0;                                         // Attr7
+        vpoke(SPRITE_ADDR_L(GUARD_1), spriteAttr0 + 8 * (i + 1));  // Attr0
+        VERA.data0 = SPRITE_ADDR_H(GUARD_1);                       // Attr1
+        VERA.data0 = SPRITE_X_L(xPos);                             // Attr2
+        VERA.data0 = SPRITE_X_H(xPos);                             // Attr3
+        VERA.data0 = SPRITE_Y_L(yPos);                             // Attr4
+        VERA.data0 = SPRITE_Y_H(yPos);                             // Attr5
+        VERA.data0 = SPRITE_LAYER1;                                // Attr6
+        VERA.data0 = 0;                                            // Attr7
 #ifdef DEBUG
         // displayGuard(guardCount);
 #endif
         guardCount++;
         return 1;
-    } else {
+    }
+    else {
         return 0;
     }
 }
@@ -164,7 +142,8 @@ int8_t guardAlive(uint8_t x, uint8_t y)
     int8_t i = 0;
     for (i = 0; i < guardCount; i++) {
         if (guard[i].x == x && guard[i].y == y) {
-            if (guard[i].action != ACT_REBORN) return 1;
+            if (guard[i].action != ACT_REBORN)
+                return 1;
         }
     }
     return 0;
@@ -175,7 +154,8 @@ void rebornComplete(int8_t id)
     uint8_t x = guard[id].x;
     uint8_t y = guard[id].y;
 
-    if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+    if (map[x][y].act == TILE_RUNNER)
+        setRunnerDead();
 
     map[x][y].act = TILE_GUARD;
     guard[id].action = ACT_FALL;
@@ -220,17 +200,18 @@ uint8_t dropGold(uint8_t id)
     if (curGuard->hasGold > 1) {
         // Decrease count but don't drop gold
         curGuard->hasGold--;
-    } else if (curGuard->hasGold == 1) {
+    }
+    else if (curGuard->hasGold == 1) {
         uint8_t x = curGuard->x;
         uint8_t y = curGuard->y;
-        if (map[x][y].base == TILE_BLANK &&
-            (y >= MAX_TILE_Y || (nextToken = map[x][y+1].base) == TILE_BRICK ||
-            nextToken == TILE_BLOCK || nextToken == TILE_LADDER)) {
-            addGold(x,y);
+        if (map[x][y].base == TILE_BLANK && (y >= MAX_TILE_Y || (nextToken = map[x][y + 1].base) == TILE_BRICK ||
+                                             nextToken == TILE_BLOCK || nextToken == TILE_LADDER)) {
+            addGold(x, y);
             curGuard->hasGold = -1;
             drop = 1;
         }
-    } else if (curGuard->hasGold < 0) {
+    }
+    else if (curGuard->hasGold < 0) {
         curGuard->hasGold++;
     }
     return drop;
@@ -650,7 +631,8 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;
             y--;
             yOffset += TILE_H;
-            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+            if (map[x][y].act == TILE_RUNNER)
+                setRunnerDead();
         }
 
         if (yOffset <= 0 && yOffset > -1) {
@@ -690,7 +672,8 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;
             y++;
             yOffset -= TILE_H;
-            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+            if (map[x][y].act == TILE_RUNNER)
+                setRunnerDead();
         }
 
         // Drop gold while guard falls
@@ -707,10 +690,10 @@ void guardMoveStep(uint8_t id, uint8_t action)
                 if (curGuard->hasGold > 0) {
                     if (map[x][y - 1].base == TILE_BLANK) {
                         // Drop gold above
-                        addGold(x,y-1);
+                        addGold(x, y - 1);
                     }
                     else {
-                        decGold(); // Gold disappears
+                        decGold();  // Gold disappears
                     }
                     curGuard->hasGold = 0;
                 }
@@ -720,10 +703,10 @@ void guardMoveStep(uint8_t id, uint8_t action)
                 if (curGuard->hasGold > 0) {
                     if (map[x][y - 1].base == TILE_BLANK) {
                         // Drop ggold above
-                        addGold(x,y-1);
+                        addGold(x, y - 1);
                     }
                     else {
-                        decGold(); // Gold disappears
+                        decGold();  // Gold disappears
                     }
                     curGuard->hasGold = 0;
                 }
@@ -766,10 +749,11 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;  // Runner move to [x-1][y], so set [x][y] to previous state
             x--;
             xOffset += TILE_W;
-            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+            if (map[x][y].act == TILE_RUNNER)
+                setRunnerDead();
         }
         if (xOffset <= 0 && xOffset > -1) {
-            dropGold(id);   // Try to drop gold
+            dropGold(id);  // Try to drop gold
         }
         if (curToken == TILE_ROPE)
             curGuard->sequence = RAPPEL_SEQUENCE;
@@ -795,7 +779,8 @@ void guardMoveStep(uint8_t id, uint8_t action)
             map[x][y].act = curToken;
             x++;
             xOffset = xOffset - TILE_W;
-            if (map[x][y].act == TILE_RUNNER) setRunnerDead();
+            if (map[x][y].act == TILE_RUNNER)
+                setRunnerDead();
         }
         if (xOffset >= 0 && xOffset < 1) {
             dropGold(id);
@@ -829,15 +814,15 @@ void guardMoveStep(uint8_t id, uint8_t action)
         curGuard->idx++;
         curGuard->idx = curGuard->idx % guardSeqSizes[curGuard->sequence];
         vpoke(guardSequences[curGuard->sequence][curGuard->idx], SPRITE_ATTR0 + 8 * (id + 1));
-        vpoke((3 << 2) | dir, SPRITE_ATTR6 + 8 * (id + 1));
+        vpoke(SPRITE_LAYER1 | dir, SPRITE_ATTR6 + 8 * (id + 1));
 
         // sprite x position
-        vpoke(xPos & 0xff, SPRITE_ATTR2 + 8 * (id + 1));
-        vpoke(xPos >> 8, SPRITE_ATTR3 + 8 * (id + 1));
+        vpoke(SPRITE_X_L(xPos), SPRITE_ATTR2 + 8 * (id + 1));
+        vpoke(SPRITE_X_H(xPos), SPRITE_ATTR3 + 8 * (id + 1));
 
         // sprite y position
-        vpoke(yPos & 0xff, SPRITE_ATTR4 + 8 * (id + 1));
-        vpoke(yPos >> 8, SPRITE_ATTR5 + 8 * (id + 1));
+        vpoke(SPRITE_Y_L(yPos), SPRITE_ATTR4 + 8 * (id + 1));
+        vpoke(SPRITE_Y_H(yPos), SPRITE_ATTR5 + 8 * (id + 1));
 
         curGuard->x = x;
         curGuard->y = y;
@@ -849,12 +834,11 @@ void guardMoveStep(uint8_t id, uint8_t action)
 
     // check if there is gold to pick up and cary
     if (map[x][y].base == TILE_GOLD && curGuard->hasGold == 0 &&
-        ((!xOffset && yOffset >= 0 && yOffset < H4) ||
-         (!yOffset && xOffset >= 0 && xOffset < W4) ||
-         (y < MAX_TILE_Y && map[x][y+1].base == TILE_LADDER && yOffset < H4)    // gold above ladder
-        )) {
+        ((!xOffset && yOffset >= 0 && yOffset < H4) || (!yOffset && xOffset >= 0 && xOffset < W4) ||
+         (y < MAX_TILE_Y && map[x][y + 1].base == TILE_LADDER && yOffset < H4)  // gold above ladder
+         )) {
         curGuard->hasGold = rand() % 37;
-        removeGold(x,y);
+        removeGold(x, y);
     }
 }
 
@@ -922,7 +906,7 @@ void removeFromShake(uint8_t id)
 }
 
 #define SHAKE_LENGTH 5
-static uint16_t shakeTimes[] = {140, 146, 152, 158, 162 };
+static uint16_t shakeTimes[] = {140, 146, 152, 158, 162};
 
 void processGuardShake()
 {
@@ -935,7 +919,7 @@ void processGuardShake()
 
             if (shake[i].count >= shakeTimes[shake[i].idx]) {
                 // Shake the guard by shifting its X position
-                uint16_t xPos = (curGuard->x + X_OFFSET)* TILE_W;
+                uint16_t xPos = (curGuard->x + X_OFFSET) * TILE_W;
                 if (shake[i].idx % 2) {
                     xPos -= 2;
                 }
