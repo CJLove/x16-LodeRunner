@@ -2,6 +2,7 @@
 #include "loderunner.h"
 #include "runner.h"
 #include "guard.h"
+#include "bank_control.h"
 #include <cbm.h>
 #include <cx16.h>
 #include <stdio.h>
@@ -132,22 +133,22 @@ void displayStatus(uint32_t score, uint8_t level)
 
 void initLevels()
 {    
-    VIA1.pra = WORLD_CLASSIC;
+    BANK_CTRL.ram_bank = WORLD_CLASSIC;
     currentGame.maxLevels[WORLD_IDX_CLASSIC] = *(uint8_t *)(LEVEL_COUNT + 1);
     printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_CLASSIC]);
-    VIA1.pra = WORLD_CHAMP;
+    BANK_CTRL.ram_bank = WORLD_CHAMP;
     currentGame.maxLevels[WORLD_IDX_CHAMP] = *(uint8_t *)(LEVEL_COUNT + 1);
     printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_CHAMP]);
-    VIA1.pra = WORLD_PRO;
+    BANK_CTRL.ram_bank = WORLD_PRO;
     currentGame.maxLevels[WORLD_IDX_PRO] = *(uint8_t *)(LEVEL_COUNT + 1);
     printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_PRO]);
-    VIA1.pra = WORLD_FANBOOK;
+    BANK_CTRL.ram_bank = WORLD_FANBOOK;
     currentGame.maxLevels[WORLD_IDX_FANBOOK] = *(uint8_t *)(LEVEL_COUNT + 1);
     printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_FANBOOK]);
-    VIA1.pra = WORLD_REVENGE;
+    BANK_CTRL.ram_bank = WORLD_REVENGE;
     currentGame.maxLevels[WORLD_IDX_REVENGE] = *(uint8_t *)(LEVEL_COUNT + 1);
     printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_REVENGE]);
-    VIA1.pra = WORLD_CUSTOM;
+    BANK_CTRL.ram_bank = WORLD_CUSTOM;
     currentGame.maxLevels[WORLD_IDX_CUSTOM] = *(uint8_t *)(LEVEL_COUNT + 1);
     printf("Max=%d\n",currentGame.maxLevels[WORLD_IDX_CUSTOM]);
 }
@@ -161,7 +162,7 @@ int loadLevel(uint8_t world, uint8_t level)
     uint8_t bank = world + (level / 36);
     uint8_t foundRunner = 0;
 
-    VIA1.pra = bank;
+    BANK_CTRL.ram_bank = bank;
 
     max = *(uint8_t *)(LEVEL_COUNT + 1);
     // Clear the runner, gold count, and all state info regarding
@@ -257,7 +258,7 @@ int loadLevel(uint8_t world, uint8_t level)
         return 1;
     }
 
-    VIA1.pra = 0;
+    BANK_CTRL.ram_bank = 0;
 
     // Invalid level for this bank
     return 0;

@@ -1,14 +1,14 @@
 {
     "env": {
       "myDefaultIncludePath": ["${workspaceFolder}/libX16/include", "${workspaceFolder}/libX16/include", "${workspaceFolder}/libX16Test/include","${workspaceFolder}/src"],
-      "myCompilerPath": "/opt/cc65/share/cc65/include/"
+      "myCompilerPath": "/usr/local/share/cc65/include/"
     },
     "configurations": [
       {
         "name": "linux",
         "intelliSenseMode": "gcc-x64",
-        "includePath": ["${myCompilerPath}", "${myDefaultIncludePath}" ],
-        "compilerPath": "/opt/cc65/bin/cl65",
+        "includePath": ["/usr/local/share/cc65/include/", "${workspaceFolder}", "${workspaceFolder}/libX16/include", "${workspaceFolder}/libX16/include", "${workspaceFolder}/src" ],
+        "compilerPath": "/usr/local/bin/cl65",
         "cStandard": "c99",
         "cppStandard": "c++17",
         "browse": {

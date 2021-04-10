@@ -1,6 +1,7 @@
 #include "key.h"
 #include "levels.h"
 #include "loderunner.h"
+#include "bank_control.h"
 #include <cbm.h>
 #include <conio.h>
 #include <cx16.h>
@@ -35,7 +36,7 @@ static void displaySplash()
     uint8_t y = 0;
     uint8_t *tilemap = (uint8_t *)0xa000;
     // Bank 21 for splash tilemap
-    VIA1.pra = 21;
+    BANK_CTRL.ram_bank = 21;
     setTileOffsets(0,0);
 
     for (x = 0; x < 40; x++) {
@@ -64,7 +65,7 @@ static void clearKeyboardBuffer()
     // for each rom version.
 
     // Switch to Bank 0
-    VIA1.pra = 0;
+    BANK_CTRL.ram_bank = 0;
     {
         uint8_t *keyCount = (uint8_t *)0xa00a;
         *keyCount = 0;
